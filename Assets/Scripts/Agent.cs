@@ -39,6 +39,12 @@ public class Agent : MonoBehaviour
             
     }
 
+    public void set_destination(Vector3 origin, float range)
+    {
+        Vector3 new_destination = GetRandomNavMeshPosition(origin, range);
+        nav_mesh_agent.SetDestination(new_destination);
+    }
+
     private Vector3 GetRandomNavMeshPosition(Vector3 origin, float range)
     {
         //1. Pick a point
@@ -53,11 +59,5 @@ public class Agent : MonoBehaviour
         result = hit.position;
 
         return result;
-    }
-
-    public void set_destination(Vector3 origin, float range)
-    {
-        Vector3 new_destination = GetRandomNavMeshPosition(origin, range);
-        nav_mesh_agent.SetDestination(new_destination);
     }
 }
