@@ -12,8 +12,8 @@ public class Walker : MonoBehaviour
     {
         nav_mesh_agent = this.GetComponent<NavMeshAgent>();
 
-        Vector3 spawn_origin = new Vector3(270, 0, 120);
-        float spawn_range = 100;
+        Vector3 spawn_origin = new Vector3(0, 0, 0);
+        float spawn_range = 300;
 
         Vector3 start_position = GetRandomNavMeshPosition(spawn_origin, spawn_range);
         transform.position = start_position;
@@ -32,7 +32,7 @@ public class Walker : MonoBehaviour
                 if (!nav_mesh_agent.hasPath || nav_mesh_agent.velocity.sqrMagnitude == 0f)
                 {
                     // Done
-                    this.set_destination(new Vector3(200, 0, 200), 200);
+                    this.set_destination(new Vector3(0, 0, 0), 300);
                 }
             }
         }

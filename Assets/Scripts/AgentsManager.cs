@@ -6,35 +6,55 @@ using UnityEngine.AI;
 public class AgentsManager : MonoBehaviour
 {
     /*====== PUBLIC ======*/
-    [Header("AGENT")]
-    public GameObject walker_mesh;
+    [Header("AGENT MANAGEMENT")]
+    public GameObject POIs;
 
-    [Header("CROWD MANAGEMENT")]
+    [Header("AGENT MANAGEMENT")]
+    public GameObject walker_mesh;
+    public GameObject visitor_mesh;
+
+    [Header("WALKERS MANAGEMENT (CROWD)")]
     public int walker_number = 25;
     public int walker_increment = 25;
 
+    [Header("VISITORS MANAGEMENT")]
+    public int visitor_number = 25;
+    public int visitor_increment = 25;
+
     /*====== PRIVATE ======*/
     private List<GameObject> walkers = new List<GameObject>();
+    private List<GameObject> visitors = new List<GameObject>();
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        for(int i=0; i<walker_number; ++i)
-        {
-            CreateWalker();
+    private void CreateAgent(GameObject agent_mesh){
+        GameObject new_agent = Instantiate(agent_mesh);
+        new_agent.transform.parent = transform;
+
+        if(agent_mesh == walker_mesh) {
+            walkers.Add(new_agent);
+        }else{
+            visitors.Add(new_agent);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    // Start is called before the first frame update
+    void Start()
     {
-        
-    }
+        // POIs
+        // foreach (Transform POI in Pois)
+        // {
+            
+        // }
 
-    private void CreateWalker(){
-        GameObject new_walker = Instantiate(walker_mesh);
-        new_walker.transform.parent = transform;
-        walkers.Add(new_walker);
+        // AGENTS
+        for(int i=0; i < walker_number; ++i)
+        {
+            CreateAgent(walker_mesh);
+        }
+
+        for(int i=0; i < visitor_number; ++i)
+        {
+            CreateAgent(visitor_mesh);
+        }
     }
 
     public void AddWalkers(){
@@ -42,7 +62,16 @@ public class AgentsManager : MonoBehaviour
         
         for(int i=0; i<walker_increment; ++i)
         {
-            CreateWalker();
+            CreateAgent(walker_mesh);
+        }
+    }
+
+    public void AddVisitors(){
+        visitor_number += visitor_increment;
+        
+        for(int i=0; i<visitor_increment; ++i)
+        {
+            CreateAgent(visitor_mesh);
         }
     }
 }
