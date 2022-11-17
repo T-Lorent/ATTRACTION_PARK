@@ -670,7 +670,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Add Agents
+  m_text: Add Walkers
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -890,9 +890,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd4e38dedbf6fe84e9060d3e1e499c40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent_mesh: {fileID: 6472194509782686738, guid: ad32bd6ac9b98d347a7011d32afbfe69, type: 3}
-  agent_number: 25
-  crowd_step: 25
+  walker_mesh: {fileID: 6472194509782686738, guid: ad32bd6ac9b98d347a7011d32afbfe69, type: 3}
+  walker_number: 25
+  walker_increment: 25
 --- !u!4 &1785837406
 Transform:
   m_ObjectHideFlags: 0
@@ -900,7 +900,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1785837404}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 328.19843, y: 45.903427, z: 156.72955}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -921,7 +921,7 @@ GameObject:
   - component: {fileID: 2131642417}
   - component: {fileID: 2131642416}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Walkers Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -994,7 +994,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1785837405}
         m_TargetAssemblyTypeName: AgentsManager, Assembly-CSharp
-        m_MethodName: AddAgents
+        m_MethodName: AddWalkers
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

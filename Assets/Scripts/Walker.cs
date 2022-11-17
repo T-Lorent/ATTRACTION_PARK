@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Agent : MonoBehaviour
+public class Walker : MonoBehaviour
 {
     private NavMeshAgent nav_mesh_agent = null;
 

@@ -7,21 +7,21 @@ public class AgentsManager : MonoBehaviour
 {
     /*====== PUBLIC ======*/
     [Header("AGENT")]
-    public GameObject agent_mesh;
+    public GameObject walker_mesh;
 
     [Header("CROWD MANAGEMENT")]
-    public int agent_number = 25;
-    public int crowd_step = 25;
+    public int walker_number = 25;
+    public int walker_increment = 25;
 
     /*====== PRIVATE ======*/
-    private List<GameObject> agents = new List<GameObject>();
+    private List<GameObject> walkers = new List<GameObject>();
     
     // Start is called before the first frame update
     void Start()
     {
-        for(int i=0; i<agent_number; ++i)
+        for(int i=0; i<walker_number; ++i)
         {
-            CreateAgent();
+            CreateWalker();
         }
     }
 
@@ -31,18 +31,18 @@ public class AgentsManager : MonoBehaviour
         
     }
 
-    private void CreateAgent(){
-        GameObject new_agent = Instantiate(agent_mesh);
-        new_agent.transform.parent = transform;
-        agents.Add(new_agent);
+    private void CreateWalker(){
+        GameObject new_walker = Instantiate(walker_mesh);
+        new_walker.transform.parent = transform;
+        walkers.Add(new_walker);
     }
 
-    public void AddAgents(){
-        agent_number += crowd_step;
+    public void AddWalkers(){
+        walker_number += walker_increment;
         
-        for(int i=0; i<agent_number; ++i)
+        for(int i=0; i<walker_increment; ++i)
         {
-            CreateAgent();
+            CreateWalker();
         }
     }
 }
