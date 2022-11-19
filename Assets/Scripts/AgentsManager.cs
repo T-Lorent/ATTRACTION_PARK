@@ -30,8 +30,10 @@ public class AgentsManager : MonoBehaviour
         new_agent.transform.parent = transform;
 
         if(agent_mesh == walker_mesh) {
+            new_agent.GetComponent<Renderer>().material.color = Color.red;
             walkers.Add(new_agent);
         }else{
+            new_agent.GetComponent<Renderer>().material.color = Color.blue;
             visitors.Add(new_agent);
         }
     }
