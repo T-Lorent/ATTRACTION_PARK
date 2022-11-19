@@ -3,7 +3,13 @@ using UnityEngine.AI;
 
 public class Visitor : MonoBehaviour
 {
+    /*====== PUBLIC ======*/
+    public GameObject POIs;
+
+    /*====== PRIVATE ======*/
     private NavMeshAgent nav_mesh_agent = null;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +21,9 @@ public class Visitor : MonoBehaviour
 
         Vector3 start_position = GetRandomNavMeshPosition(spawn_origin, spawn_range);
         transform.position = start_position;
+
+        Vector3 destination_position = set_destination();
+        nav_mesh_agent.SetDestination(destination_position);
     }
 
     // Update is called once per frame
@@ -37,5 +46,15 @@ public class Visitor : MonoBehaviour
         result = hit.position;
 
         return result;
+    }
+
+    private Vector3 set_destination()
+    {
+        // Pick a POI
+        int number_of_POI = POIs.transform.childCount;
+        int random_index = Random.Range(0, number_of_POI);
+        Transform POI = POIs.transform.GetChild(random_index);
+        
+        return POI.transform.position;
     }
 }
