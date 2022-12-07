@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class AttractionsManager : MonoBehaviour
 {
-    private static List<Vector3> attractions_position = new List<Vector3>();
+    private static List<Attraction> attractions_position = new List<Attraction>();
     
     void Start()
     {
-        foreach (Transform POI in transform)
+        foreach (Transform attraction in transform)
         {
-            attractions_position.Add(POI.transform.position);
+            attractions_position.Add(attraction.GetComponent<Attraction>());
         }
     }
 
-    public static Vector3 GetRandomAttraction()
+    public static Attraction GetRandomAttraction()
     {
         return attractions_position[Random.Range(0, attractions_position.Count)];
     }
