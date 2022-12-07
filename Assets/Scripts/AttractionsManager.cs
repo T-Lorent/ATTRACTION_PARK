@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class AttractionsManager : MonoBehaviour
 {
-    private static List<Attraction> attractions_position = new List<Attraction>();
+    private static Dictionary<int, Attraction> attractions = new Dictionary<int, Attraction>();
     
     void Start()
     {
+        int index = 0;
         foreach (Transform attraction in transform)
         {
-            attractions_position.Add(attraction.GetComponent<Attraction>());
+            attraction.GetComponent<Attraction>().SetId(index);
+            attractions.Add(index, attraction.GetComponent<Attraction>());
+            index++;
         }
     }
 
-    public static Attraction GetRandomAttraction()
+    public static Vector3 GetQueuePosition(int id)
     {
-        return attractions_position[Random.Range(0, attractions_position.Count)];
+        return attractions[id].GetQueuePosition();
+    }
+
+    public static int GetRandomAttractionId()
+    {
+        return attractions[Random.Range(0, attractions.Count)].GetId();
     }
 }

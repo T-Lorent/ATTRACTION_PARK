@@ -5,18 +5,19 @@ using UnityEngine;
 public class Attraction : MonoBehaviour
 {
     [SerializeField] private Transform entrance;
+    [SerializeField] private Transform queue_position;
     [SerializeField] private Transform exit;
     [SerializeField] private int visitors_capacity = 1;
     [SerializeField] private int current_visitors = 0;
     [SerializeField] private float duration = 5F;
 
-    private Queue<Visitor> queue = new Queue<Visitor>();
-    private Vector3 effective_entrance;
+    private int _id;
+    private Queue<Visitor> _queue = new Queue<Visitor>();
 
     // Start is called before the first frame update
     void Start()
     {
-        effective_entrance = entrance.position;
+        queue_position.position = entrance.position;
     }
 
     // Update is called once per frame
@@ -25,8 +26,24 @@ public class Attraction : MonoBehaviour
         
     }
 
-    public Vector3 GetEffectiveEntrance()
+    public int GetId()
     {
-        return effective_entrance;
+        return _id;
+    }
+
+    public void SetId(int id)
+    {
+        _id = id;
+    }
+
+    public Vector3 GetQueuePosition()
+    {
+        return queue_position.position;
+    }
+
+    public void addVisitor(Visitor new_visitor)
+    {
+        _queue.Enqueue(new_visitor);
+        queue_position.Translate(new_visitor.transform.position - new_visitor.transform.forward);
     }
 }
