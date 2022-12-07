@@ -13,9 +13,7 @@ public class Visitor : MonoBehaviour
     void Start()
     {
         nav_mesh_agent = this.GetComponent<NavMeshAgent>();
-
-        Vector3 destination_position = set_destination();
-        nav_mesh_agent.SetDestination(destination_position);
+        SetDestination();
     }
 
     // Update is called once per frame
@@ -24,13 +22,9 @@ public class Visitor : MonoBehaviour
         
     }
 
-    private Vector3 set_destination()
+    private void SetDestination()
     {
-        // // Pick a POI
-        // int number_of_POI = POIs.transform.childCount;
-        // int random_index = Random.Range(0, number_of_POI);
-        // Transform POI = POIs.transform.GetChild(random_index);
-        // return POI.transform.position;
-        return new Vector3(0,0,0);
+        Vector3 attraction_position = AttractionsManager.GetRandomAttraction();
+        nav_mesh_agent.SetDestination(attraction_position);
     }
 }

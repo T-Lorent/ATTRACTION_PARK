@@ -7,9 +7,6 @@ public class AgentsManager : MonoBehaviour
 {
     /*====== PUBLIC ======*/
     [Header("AGENT MANAGEMENT")]
-    public GameObject POIs;
-
-    [Header("AGENT MANAGEMENT")]
     public GameObject walker_mesh;
     public GameObject visitor_mesh;
 
@@ -24,7 +21,6 @@ public class AgentsManager : MonoBehaviour
     /*====== PRIVATE ======*/
     private List<GameObject> walkers = new List<GameObject>();
     private List<GameObject> visitors = new List<GameObject>();
-    private List<Vector3> POIs_position = new List<Vector3>();
 
     private static Vector3 spawn_origin = new Vector3(0, 0, 0);
     private static float spawn_range = 300;
@@ -45,12 +41,6 @@ public class AgentsManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // POIs
-        foreach (Transform POI in POIs.transform)
-        {
-            POIs_position.Add(POI.transform.position);
-        }
-
         // AGENTS
         for(int i=0; i < walker_number; ++i)
         {

@@ -12,7 +12,7 @@ public class Walker : MonoBehaviour
     {
         nav_mesh_agent = this.GetComponent<NavMeshAgent>();
 
-        set_destination();
+        SetDestination();
     }
 
     // Update is called once per frame
@@ -27,14 +27,14 @@ public class Walker : MonoBehaviour
                 if (!nav_mesh_agent.hasPath || nav_mesh_agent.velocity.sqrMagnitude == 0f)
                 {
                     // Done
-                    this.set_destination();
+                    SetDestination();
                 }
             }
         }
             
     }
 
-    public void set_destination()
+    public void SetDestination()
     {
         Vector3 new_destination = AgentsManager.GetRandomNavMeshPosition();
         nav_mesh_agent.SetDestination(new_destination);
