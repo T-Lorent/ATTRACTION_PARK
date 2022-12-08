@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7910461052020776716}
   m_Layer: 0
   m_Name: Visitor
-  m_TagString: Untagged
+  m_TagString: Visitor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,4 +134,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705917214dfc0e74bbc204f0438b443c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  POIs: {fileID: 3425432239871232651, guid: 35246f204e2884dae87ddd5c75e14a0a, type: 3}
