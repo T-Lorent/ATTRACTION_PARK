@@ -74,13 +74,15 @@ public class AgentsManager : MonoBehaviour
      public static Vector3 GetRandomNavMeshPosition()
     {
         //1. Pick a point
-        Vector3 point_on_sphere = Vector3.zero;
+        float coord_x;
+        float coord_z;
         NavMeshHit hit;
         Vector3 result = Vector3.zero;
 
         do {
-            point_on_sphere = spawn_origin + Random.insideUnitSphere * spawn_range;
-        }while(!NavMesh.SamplePosition(point_on_sphere, out hit, 1.0f, NavMesh.AllAreas));
+            coord_x = Random.Range(0, 400);
+            coord_z = Random.Range(0, 400);
+        }while(!NavMesh.SamplePosition(new Vector3(coord_x, 20.0F,coord_z), out hit, 20.0f, NavMesh.AllAreas));
 
         result = hit.position;
 
