@@ -3,7 +3,6 @@ using UnityEngine.AI;
 
 public class Visitor : MonoBehaviour
 {
-
     /*====== PRIVATE ======*/
     private enum State
     {
@@ -34,7 +33,7 @@ public class Visitor : MonoBehaviour
                 break;
 
             case State.WALKING:
-                Vector3 queue_position_position = AttractionsManager.GetQueuePosition(_attraction_id);
+                Vector3 queue_position_position = AttractionsManager.Instance.GetQueuePosition(_attraction_id);
 
                 if((_nav_mesh_agent.destination - transform.position).sqrMagnitude < 10)
                 {
@@ -64,8 +63,8 @@ public class Visitor : MonoBehaviour
 
     private void SetDestinationToNewAttraction()
     {
-        _attraction_id = AttractionsManager.GetRandomAttractionId();
-        SetDestination(AttractionsManager.GetQueuePosition(_attraction_id));
+        _attraction_id = AttractionsManager.Instance.GetRandomAttractionId();
+        SetDestination(AttractionsManager.Instance.GetQueuePosition(_attraction_id));
     }
 
     private void SetDestination(Vector3 destination)

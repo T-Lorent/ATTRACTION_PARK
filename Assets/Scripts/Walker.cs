@@ -5,12 +5,12 @@ using UnityEngine.AI;
 
 public class Walker : MonoBehaviour
 {
-    private NavMeshAgent nav_mesh_agent = null;
+    private NavMeshAgent _nav_mesh_agent = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        nav_mesh_agent = this.GetComponent<NavMeshAgent>();
+        _nav_mesh_agent = this.GetComponent<NavMeshAgent>();
 
         SetDestination();
     }
@@ -20,11 +20,11 @@ public class Walker : MonoBehaviour
     {
         
         // Check if we've reached the destination
-        if (!nav_mesh_agent.pathPending)
+        if (!_nav_mesh_agent.pathPending)
         {
-            if (nav_mesh_agent.remainingDistance <= nav_mesh_agent.stoppingDistance)
+            if (_nav_mesh_agent.remainingDistance <= _nav_mesh_agent.stoppingDistance)
             {
-                if (!nav_mesh_agent.hasPath || nav_mesh_agent.velocity.sqrMagnitude == 0f)
+                if (!_nav_mesh_agent.hasPath || _nav_mesh_agent.velocity.sqrMagnitude == 0f)
                 {
                     // Done
                     SetDestination();
@@ -36,7 +36,8 @@ public class Walker : MonoBehaviour
 
     public void SetDestination()
     {
-        Vector3 new_destination = AgentsManager.GetRandomNavMeshPosition();
-        nav_mesh_agent.SetDestination(new_destination);
+        _nav_mesh_agent.SetDestination(
+            GroundManager.Instance.GetRandomPosition()
+        );
     }
 }

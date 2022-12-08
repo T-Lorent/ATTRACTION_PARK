@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class AttractionsManager : MonoBehaviour
 {
-    private static Dictionary<int, Attraction> attractions = new Dictionary<int, Attraction>();
+    public static AttractionsManager Instance;
+
+    public Dictionary<int, Attraction> attractions { get; private set; } = new Dictionary<int, Attraction>();
     
+    void Awake() => Instance = this;
+
     void Start()
     {
         int index = 0;
@@ -17,12 +21,12 @@ public class AttractionsManager : MonoBehaviour
         }
     }
 
-    public static Vector3 GetQueuePosition(int id)
+    public Vector3 GetQueuePosition(int id)
     {
         return attractions[id].GetQueuePosition();
     }
 
-    public static int GetRandomAttractionId()
+    public int GetRandomAttractionId()
     {
         return attractions[Random.Range(0, attractions.Count)].GetId();
     }
