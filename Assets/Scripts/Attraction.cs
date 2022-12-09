@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Attraction : MonoBehaviour
 {
@@ -17,13 +18,7 @@ public class Attraction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        queue_position.position = entrance.position;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if(NavMesh.SamplePosition(entrance.position, out NavMeshHit hit, 10.0F, NavMesh.AllAreas)) queue_position.position = hit.position;
     }
 
     public int GetId()
@@ -34,6 +29,11 @@ public class Attraction : MonoBehaviour
     public void SetId(int id)
     {
         _id = id;
+    }
+
+    public Vector3 GetEntrancePosition()
+    {
+        return entrance.position;
     }
 
     public Vector3 GetQueuePosition()

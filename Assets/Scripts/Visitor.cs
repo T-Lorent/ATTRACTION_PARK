@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,18 +34,15 @@ public class Visitor : MonoBehaviour
                 break;
 
             case State.WALKING:
-                Vector3 queue_position_position = AttractionsManager.Instance.GetQueuePosition(_attraction_id);
+                Vector3 queue_position_position = AttractionsManager.Instance.attractions[_attraction_id].GetQueuePosition();
 
-                if((_nav_mesh_agent.destination - transform.position).sqrMagnitude < 10)
+                if(IsArrived())
                 {
-                    if(_nav_mesh_agent.destination != queue_position_position)
-                    {
-                        SetDestination(queue_position_position);
-                    }
-                    else if((queue_position_position - transform.position).sqrMagnitude < 5)
-                    {
-                        _state = State.WAITING;
-                    }
+                    _state = State.WAITING;
+                }
+                else if ((_nav_mesh_agent.destination - queue_position_position).sqrMagnitude > 0.05)
+                {
+                    SetDestination(queue_position_position);
                 }
                 break;
 
@@ -61,14 +59,38 @@ public class Visitor : MonoBehaviour
         }   
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.TryGetComponent(out QueuePosition queue_end))
+        {
+            if(queue_end.GetAttractionId() == _attraction_id) SetDestination(transform.position);
+        }
+    }
+
     private void SetDestinationToNewAttraction()
     {
         _attraction_id = AttractionsManager.Instance.GetRandomAttractionId();
-        SetDestination(AttractionsManager.Instance.GetQueuePosition(_attraction_id));
+        SetDestination(AttractionsManager.Instance.attractions[_attraction_id].GetQueuePosition());
     }
 
     private void SetDestination(Vector3 destination)
     {
         _nav_mesh_agent.SetDestination(destination);
+    }
+
+    private bool IsArrived()
+    {
+        if (!_nav_mesh_agent.pathPending)
+        {
+            if (_nav_mesh_agent.remainingDistance <= _nav_mesh_agent.stoppingDistance)
+            {
+                if (!_nav_mesh_agent.hasPath || _nav_mesh_agent.velocity.sqrMagnitude == 0f)
+                {
+                    // Done
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

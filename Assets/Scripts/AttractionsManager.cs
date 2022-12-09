@@ -21,11 +21,6 @@ public class AttractionsManager : MonoBehaviour
         }
     }
 
-    public Vector3 GetQueuePosition(int id)
-    {
-        return attractions[id].GetQueuePosition();
-    }
-
     public int GetRandomAttractionId()
     {
         return attractions[Random.Range(0, attractions.Count)].GetId();
