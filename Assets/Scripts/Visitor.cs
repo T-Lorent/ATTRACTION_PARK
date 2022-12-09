@@ -42,6 +42,10 @@ public class Visitor : MonoBehaviour
                 }
                 break;
 
+            case State.ARRIVED:
+
+                break;
+
             case State.WAITING:
                 
                 break;
@@ -67,7 +71,6 @@ public class Visitor : MonoBehaviour
             case State.ARRIVED:
                 SetDestination(transform.position);
                 _nav_mesh_agent.avoidancePriority = 0;
-                Debug.Log(_nav_mesh_agent.avoidancePriority);
                 _state = State.ARRIVED;
                 break;
 
@@ -83,7 +86,6 @@ public class Visitor : MonoBehaviour
         {
             if (queue_end.GetAttractionId() == _attraction_id)
             {
-                Debug.Log("Visitor collider triggerer");
                 SetState(State.ARRIVED);
             }
         }

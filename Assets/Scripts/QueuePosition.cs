@@ -5,7 +5,12 @@ using UnityEngine.AI;
 
 public class QueuePosition : MonoBehaviour
 {
-    private bool _is_trigger = false;
+    private Collider _collider;
+
+    void Start()
+    {
+        _collider = this.GetComponent<Collider>();
+    }
     
     public int GetAttractionId()
     {
@@ -14,10 +19,9 @@ public class QueuePosition : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.TryGetComponent(out Visitor new_visitor) && !_is_trigger)
+        if (collision.gameObject.TryGetComponent(out Visitor new_visitor))
         {
-            _is_trigger = true;
-            Debug.Log("Queue end hit");
+            _collider.enabled = false;
             // Vector3 direction = (collision.gameObject.transform.position - transform.position).normalized * 5.0F;
             Vector3 direction = -collision.gameObject.transform.forward * 5.0F;
             transform.position = collision.gameObject.transform.position;
@@ -25,7 +29,7 @@ public class QueuePosition : MonoBehaviour
             {
                 transform.position = hit.position;
             }
-            _is_trigger = false;
+            _collider.enabled = true;
         }
     }
 }
