@@ -11,7 +11,6 @@ public class Walker : MonoBehaviour
     void Start()
     {
         _nav_mesh_agent = this.GetComponent<NavMeshAgent>();
-
         SetDestination();
     }
 

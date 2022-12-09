@@ -9,6 +9,11 @@ public class GroundManager : MonoBehaviour
 
     void Awake() => Instance = this;
 
+    void Start()
+    {
+        NavMesh.avoidancePredictionTime = 1.0F;
+    }
+
     public Vector3 GetRandomPosition()
     {
         //1. Pick a point

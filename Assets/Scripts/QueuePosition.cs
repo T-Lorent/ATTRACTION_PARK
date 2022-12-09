@@ -12,7 +12,7 @@ public class QueuePosition : MonoBehaviour
         return transform.parent.GetComponent<Attraction>().GetId();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.TryGetComponent(out Visitor new_visitor) && !_is_trigger)
         {
