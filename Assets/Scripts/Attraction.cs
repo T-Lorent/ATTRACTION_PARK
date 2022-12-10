@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Attraction : MonoBehaviour
 {
     [SerializeField] private Transform _entrance;
-    [SerializeField] private QueueManager _queue;
+    [SerializeField] private Queue _queue;
     [SerializeField] private Transform _exit;
     [SerializeField] private int _visitors_capacity = 1;
     [SerializeField] private Queue<GameObject> _current_visitors = new Queue<GameObject>();
@@ -50,7 +50,7 @@ public class Attraction : MonoBehaviour
         return _current_visitors.Count == _visitors_capacity;
     }
 
-    public void BringInVisitor(ref GameObject new_visitor)
+    public void BringInVisitor(GameObject new_visitor)
     {
         new_visitor.GetComponent<Visitor>().SetState(Visitor.State.IN_ATTRACTION);
         _current_visitors.Enqueue(new_visitor);
@@ -67,8 +67,8 @@ public class Attraction : MonoBehaviour
 
         if(_queue.HasWaitingVisitor())
         {
-            GameObject first_in_queue = _queue.waiting_visitors.Dequeue();
-            BringInVisitor(ref first_in_queue);
+            GameObject first_in_queue = _queue.GetFirstInLine();
+            BringInVisitor(first_in_queue);
             // UpdateQueue();
         }
     }

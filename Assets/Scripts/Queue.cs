@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class QueueManager : MonoBehaviour
+public class Queue : MonoBehaviour
 {
-    public Queue<GameObject> waiting_visitors = new Queue<GameObject>();
-
     private Attraction _attraction;
+    private Queue<GameObject> _waiting_visitors = new Queue<GameObject>();
     private Collider _collider;
 
     void Start()
@@ -28,7 +27,12 @@ public class QueueManager : MonoBehaviour
 
     public bool HasWaitingVisitor()
     {
-        return waiting_visitors.Count > 0;
+        return _waiting_visitors.Count > 0;
+    }
+
+    public GameObject GetFirstInLine()
+    {
+        return _waiting_visitors.Dequeue();
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -41,19 +45,22 @@ public class QueueManager : MonoBehaviour
 
             if (!_attraction.IsFull())
             {
-                _attraction.BringInVisitor(ref visitor_gameObject);
+                _attraction.BringInVisitor(visitor_gameObject);
             }
             else
             {
-                waiting_visitors.Enqueue(visitor_gameObject);
+                _waiting_visitors.Enqueue(visitor_gameObject);
             }
 
             // Replacing queue position
-            Vector3 direction = -new_visitor.transform.forward * 5.0F;
-            transform.position = new_visitor.transform.position;
-            if(NavMesh.SamplePosition(transform.position + direction, out NavMeshHit hit, 5.0F, NavMesh.AllAreas))
+            if (HasWaitingVisitor())
             {
-                transform.position = hit.position;
+                Vector3 direction = -new_visitor.transform.forward * 5.0F;
+                transform.position = new_visitor.transform.position;
+                if (NavMesh.SamplePosition(transform.position + direction, out NavMeshHit hit, 5.0F, NavMesh.AllAreas))
+                {
+                    transform.position = hit.position;
+                }
             }
 
             _collider.enabled = true;
@@ -65,7 +72,7 @@ public class QueueManager : MonoBehaviour
         Debug.Log("Updating Queue");
         Vector3 previous_position = _attraction.GetEntrancePosition();
 
-        foreach (GameObject visitor in waiting_visitors)
+        foreach (GameObject visitor in _waiting_visitors)
         {
             Vector3 current_visitor_position = visitor.transform.position;
             visitor.GetComponent<Visitor>().SetDestination(previous_position);

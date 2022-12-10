@@ -77,7 +77,7 @@ public class Visitor : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if(collision.gameObject.TryGetComponent(out QueueManager queue_end))
+        if(collision.gameObject.TryGetComponent(out Queue queue_end))
         {
             if (queue_end.GetAttractionId() == _attraction_id)
             {
