@@ -20,7 +20,7 @@ public class Attraction : MonoBehaviour
         if (NavMesh.SamplePosition(_entrance.position, out NavMeshHit entrance_hit, 10.0F, NavMesh.AllAreas))
         {
             _entrance.position = entrance_hit.position;
-            _queue.SetPosition(entrance_hit.position);
+            _queue.transform.position = entrance_hit.position;
         }
         if(NavMesh.SamplePosition(_exit.position, out NavMeshHit exit_hit, 10.0F, NavMesh.AllAreas)) _exit.position = exit_hit.position;
     }

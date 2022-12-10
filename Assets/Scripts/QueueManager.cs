@@ -26,11 +26,6 @@ public class QueueManager : MonoBehaviour
         return transform.position;
     }
 
-    public void SetPosition(Vector3 new_position)
-    {
-        transform.position = new_position;
-    }
-
     public bool ContainsVisitor()
     {
         return queue.Count > 0;
