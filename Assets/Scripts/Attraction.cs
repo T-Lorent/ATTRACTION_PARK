@@ -65,9 +65,9 @@ public class Attraction : MonoBehaviour
         previous_visitor.SetActive(true);
         previous_visitor.GetComponent<Visitor>().SetState(Visitor.State.WALKING);
 
-        if(_queue.ContainsVisitor())
+        if(_queue.HasWaitingVisitor())
         {
-            GameObject first_in_queue = _queue.queue.Dequeue();
+            GameObject first_in_queue = _queue.waiting_visitors.Dequeue();
             BringInVisitor(ref first_in_queue);
             // UpdateQueue();
         }

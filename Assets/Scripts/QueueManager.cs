@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class QueueManager : MonoBehaviour
 {
-    public Queue<GameObject> queue = new Queue<GameObject>();
+    public Queue<GameObject> waiting_visitors = new Queue<GameObject>();
 
     private Attraction _attraction;
     private Collider _collider;
@@ -26,9 +26,9 @@ public class QueueManager : MonoBehaviour
         return transform.position;
     }
 
-    public bool ContainsVisitor()
+    public bool HasWaitingVisitor()
     {
-        return queue.Count > 0;
+        return waiting_visitors.Count > 0;
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -45,7 +45,7 @@ public class QueueManager : MonoBehaviour
             }
             else
             {
-                queue.Enqueue(visitor_gameObject);
+                waiting_visitors.Enqueue(visitor_gameObject);
             }
 
             // Replacing queue position
@@ -65,7 +65,7 @@ public class QueueManager : MonoBehaviour
         Debug.Log("Updating Queue");
         Vector3 previous_position = _attraction.GetEntrancePosition();
 
-        foreach (GameObject visitor in queue)
+        foreach (GameObject visitor in waiting_visitors)
         {
             Vector3 current_visitor_position = visitor.transform.position;
             visitor.GetComponent<Visitor>().SetDestination(previous_position);
