@@ -6,19 +6,22 @@ using UnityEngine.AI;
 public class Attraction : MonoBehaviour
 {
     [SerializeField] private Transform _entrance;
-    [SerializeField] private Transform _queue_position;
+    [SerializeField] private QueueManager _queue;
     [SerializeField] private Transform _exit;
     [SerializeField] private int _visitors_capacity = 1;
     [SerializeField] private Queue<GameObject> _current_visitors = new Queue<GameObject>();
     [SerializeField] private float _duration = 5F;
 
     private int _id;
-    private Queue<GameObject> _queue = new Queue<GameObject>();
 
     // Start is called before the first frame update
     void Start()
     {
-        if(NavMesh.SamplePosition(_entrance.position, out NavMeshHit entrance_hit, 10.0F, NavMesh.AllAreas)) _queue_position.position = entrance_hit.position;
+        if (NavMesh.SamplePosition(_entrance.position, out NavMeshHit entrance_hit, 10.0F, NavMesh.AllAreas))
+        {
+            _entrance.position = entrance_hit.position;
+            _queue.SetPosition(entrance_hit.position);
+        }
         if(NavMesh.SamplePosition(_exit.position, out NavMeshHit exit_hit, 10.0F, NavMesh.AllAreas)) _exit.position = exit_hit.position;
     }
 
@@ -39,23 +42,15 @@ public class Attraction : MonoBehaviour
 
     public Vector3 GetQueuePosition()
     {
-        return _queue_position.position;
+        return _queue.transform.position;
     }
 
-    public void AddVisitor(ref GameObject new_visitor)
+    public bool IsFull()
     {
-        if (_current_visitors.Count < _visitors_capacity)
-        {
-            BringInVisitor(ref new_visitor);
-        }
-        else
-        {
-            _queue.Enqueue(new_visitor);
-        }
-        
+        return _current_visitors.Count == _visitors_capacity;
     }
 
-    private void BringInVisitor(ref GameObject new_visitor)
+    public void BringInVisitor(ref GameObject new_visitor)
     {
         new_visitor.GetComponent<Visitor>().SetState(Visitor.State.IN_ATTRACTION);
         _current_visitors.Enqueue(new_visitor);
@@ -70,26 +65,11 @@ public class Attraction : MonoBehaviour
         previous_visitor.SetActive(true);
         previous_visitor.GetComponent<Visitor>().SetState(Visitor.State.WALKING);
 
-        if(_queue.Count > 0)
+        if(_queue.ContainsVisitor())
         {
-            GameObject first_in_queue = _queue.Dequeue();
+            GameObject first_in_queue = _queue.queue.Dequeue();
             BringInVisitor(ref first_in_queue);
             // UpdateQueue();
         }
-    }
-
-    private void UpdateQueue()
-    {
-        Debug.Log("Updating Queue");
-        Vector3 previous_position = _entrance.transform.position;
-
-        foreach(GameObject visitor in _queue)
-        {
-            Vector3 current_visitor_position = visitor.transform.position;
-            visitor.GetComponent<Visitor>().SetDestination(previous_position);
-            previous_position = current_visitor_position;
-        }
-
-        _queue_position.position = previous_position;
     }
 }

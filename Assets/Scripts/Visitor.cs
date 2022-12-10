@@ -8,7 +8,6 @@ public class Visitor : MonoBehaviour
     public enum State
     {
         WALKING,
-        ARRIVED,
         WAITING,
         IN_ATTRACTION
     };
@@ -63,7 +62,7 @@ public class Visitor : MonoBehaviour
             case State.WAITING:
                 SetDestination(transform.position);
                 _nav_mesh_agent.avoidancePriority = 0;
-                _state = State.ARRIVED;
+                _state = State.WAITING;
                 break;
 
             case State.IN_ATTRACTION:
@@ -78,7 +77,7 @@ public class Visitor : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if(collision.gameObject.TryGetComponent(out QueuePosition queue_end))
+        if(collision.gameObject.TryGetComponent(out QueueManager queue_end))
         {
             if (queue_end.GetAttractionId() == _attraction_id)
             {
