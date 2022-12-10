@@ -25,14 +25,16 @@ public class Queue : MonoBehaviour
         return transform.position;
     }
 
-    public bool HasWaitingVisitor()
+    public bool ContainsVisitors()
     {
         return _waiting_visitors.Count > 0;
     }
 
     public GameObject GetFirstInLine()
     {
-        return _waiting_visitors.Dequeue();
+        GameObject first_in_line = _waiting_visitors.Dequeue();
+        UpdateQueuePosition(first_in_line.transform.position);
+        return first_in_line;
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -53,7 +55,7 @@ public class Queue : MonoBehaviour
             }
 
             // Replacing queue position
-            if (HasWaitingVisitor())
+            if (ContainsVisitors())
             {
                 Vector3 direction = -new_visitor.transform.forward * 5.0F;
                 transform.position = new_visitor.transform.position;
@@ -67,18 +69,23 @@ public class Queue : MonoBehaviour
         }
     }
 
-    private void UpdateQueue()
+    private void UpdateQueuePosition(Vector3 previous_position)
     {
-        Debug.Log("Updating Queue");
-        Vector3 previous_position = _attraction.GetEntrancePosition();
-
-        foreach (GameObject visitor in _waiting_visitors)
+        if(!ContainsVisitors())
         {
-            Vector3 current_visitor_position = visitor.transform.position;
-            visitor.GetComponent<Visitor>().SetDestination(previous_position);
-            previous_position = current_visitor_position;
+            transform.position = _attraction.GetEntrancePosition();
         }
+        else
+        {
+            foreach (GameObject visitor in _waiting_visitors)
+            {
+                Debug.Log(previous_position);
+                Vector3 current_visitor_position = visitor.transform.position;
+                visitor.GetComponent<Visitor>().SetDestination(previous_position);
+                previous_position = current_visitor_position;
+            }
 
-        transform.position = previous_position;
+            transform.position = previous_position;
+        }
     }
 }
