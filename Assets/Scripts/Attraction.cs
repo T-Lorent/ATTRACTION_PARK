@@ -25,6 +25,11 @@ public class Attraction : MonoBehaviour
         if(NavMesh.SamplePosition(_exit.position, out NavMeshHit exit_hit, 10.0F, NavMesh.AllAreas)) _exit.position = exit_hit.position;
     }
 
+    void Update()
+    {
+    
+    }
+
     public int GetId()
     {
         return _id;
@@ -53,6 +58,7 @@ public class Attraction : MonoBehaviour
     public void BringInVisitor(GameObject new_visitor)
     {
         new_visitor.GetComponent<Visitor>().SetState(Visitor.State.IN_ATTRACTION);
+        new_visitor.SetActive(false);
         _current_visitors.Enqueue(new_visitor);
         StartCoroutine("RollVisitors");
     }
@@ -69,7 +75,6 @@ public class Attraction : MonoBehaviour
         {
             GameObject first_in_queue = _queue.GetFirstInLine();
             BringInVisitor(first_in_queue);
-            // UpdateQueue();
         }
     }
 }

@@ -1662,7 +1662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entrance: {fileID: 813873110295957004}
-  _queue_position: {fileID: 1696901913918335288}
+  _queue: {fileID: 5273721112945810453}
   _exit: {fileID: 1214466894608434742}
   _visitors_capacity: 1
   _duration: 5
@@ -1741,7 +1741,7 @@ GameObject:
   - component: {fileID: 5273721112945810454}
   - component: {fileID: 5273721112945810453}
   m_Layer: 0
-  m_Name: queue_position
+  m_Name: Queue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

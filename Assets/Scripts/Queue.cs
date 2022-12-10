@@ -7,6 +7,7 @@ public class Queue : MonoBehaviour
 {
     private Attraction _attraction;
     private Queue<GameObject> _waiting_visitors = new Queue<GameObject>();
+    private GameObject[] _last_waiting_visitors = new GameObject[3];
     private Collider _collider;
 
     void Start()
@@ -52,6 +53,9 @@ public class Queue : MonoBehaviour
             else
             {
                 _waiting_visitors.Enqueue(visitor_gameObject);
+                _last_waiting_visitors[0] = _last_waiting_visitors[1];
+                _last_waiting_visitors[1] = _last_waiting_visitors[2];
+                _last_waiting_visitors[2] = visitor_gameObject;
                 StepBackQueueEnd();
             }
 
@@ -62,43 +66,41 @@ public class Queue : MonoBehaviour
     private void StepBackQueueEnd()
     {
         // Replacing queue position
-        if (_waiting_visitors.Count > 3)
+        if (_waiting_visitors.Count >= 3)
         {
-            int max_range = _waiting_visitors.Count - 1;
-            GameObject[] visitors = _waiting_visitors.ToArray();
-
-            Vector3 position_1 = visitors[max_range - 2].transform.position;
-            Vector3 position_2 = visitors[max_range - 1].transform.position;
-            Vector3 position_3 = visitors[max_range].transform.position;
+            /* Store the position of the 3 last visitors in queue */
+            Vector3 position_1 = _last_waiting_visitors[0].transform.position;
+            Vector3 position_2 = _last_waiting_visitors[1].transform.position;
+            Vector3 position_3 = _last_waiting_visitors[2].transform.position;
 
             Vector3 direction_1_to_2 = (position_2 - position_1).normalized;
             Vector3 direction_1_to_3 = (position_3 - position_1).normalized;
 
+            /* Compute divergent angle between waiters on XZ plan */
             Quaternion z_rotation = Quaternion.FromToRotation(
                 new Vector3(direction_1_to_2.x, 0, direction_1_to_2.z),
                 new Vector3(direction_1_to_3.x, 0, direction_1_to_3.z)
             );
 
+            /* MOVE QUEUE END TO NEXT POSITION */
             transform.position = position_3;
             transform.rotation *= Quaternion.FromToRotation(-transform.forward, position_2) * z_rotation;
-            transform.Translate(transform.forward * 2.0F);
-            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5.0F, NavMesh.AllAreas))
-            {
-                transform.position = hit.position;
-            }
-            transform.rotation = _attraction.transform.rotation;
+            transform.Translate(transform.forward * 6.0F);
         }
         else
         {
-            GameObject[] visitors = _waiting_visitors.ToArray();
-            GameObject new_visitor = visitors[_waiting_visitors.Count -1];
-            Vector3 direction = -new_visitor.transform.forward * 5.0F;
-            transform.position = new_visitor.transform.position;
-            if (NavMesh.SamplePosition(transform.position + direction, out NavMeshHit hit, 5.0F, NavMesh.AllAreas))
-            {
-                transform.position = hit.position;
-            }
+            /* MOVE QUEUE END TO NEXT POSITION */
+            transform.Translate(Vector3.forward * 6.0F);
         }
+
+        /* MOVE THE COMPUTE POSITION TO A NAVMESH POSITION*/
+        if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5.0F, NavMesh.AllAreas))
+        {
+            transform.position = hit.position;
+        }
+
+        /* RESET END QUEUE ROTATION */
+        transform.rotation = _attraction.transform.rotation;
     }
 
     private void Advance(Vector3 previous_position)
@@ -111,7 +113,6 @@ public class Queue : MonoBehaviour
         {
             foreach (GameObject visitor in _waiting_visitors)
             {
-                Debug.Log(previous_position);
                 Vector3 current_visitor_position = visitor.transform.position;
                 visitor.GetComponent<Visitor>().SetDestination(previous_position);
                 previous_position = current_visitor_position;

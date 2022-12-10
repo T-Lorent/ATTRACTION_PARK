@@ -66,7 +66,7 @@ public class Visitor : MonoBehaviour
                 break;
 
             case State.IN_ATTRACTION:
-                this.gameObject.SetActive(false);
+                // The Visitor is SetActive(False) in the Attraction class
                 break;
 
             default:
