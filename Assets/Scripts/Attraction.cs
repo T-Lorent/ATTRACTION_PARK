@@ -5,20 +5,29 @@ using UnityEngine.AI;
 
 public class Attraction : MonoBehaviour
 {
-    [SerializeField] private Transform entrance;
-    [SerializeField] private Transform queue_position;
-    [SerializeField] private Transform exit;
-    [SerializeField] private int visitors_capacity = 1;
-    [SerializeField] private int current_visitors = 0;
-    [SerializeField] private float duration = 5F;
+    [SerializeField] private Transform _entrance;
+    [SerializeField] private Queue _queue;
+    [SerializeField] private Transform _exit;
+    [SerializeField] private int _visitors_capacity = 1;
+    [SerializeField] private Queue<GameObject> _current_visitors = new Queue<GameObject>();
+    [SerializeField] private float _duration = 5F;
 
     private int _id;
-    private Queue<Visitor> _queue = new Queue<Visitor>();
 
     // Start is called before the first frame update
     void Start()
     {
-        if(NavMesh.SamplePosition(entrance.position, out NavMeshHit hit, 10.0F, NavMesh.AllAreas)) queue_position.position = hit.position;
+        if (NavMesh.SamplePosition(_entrance.position, out NavMeshHit entrance_hit, 10.0F, NavMesh.AllAreas))
+        {
+            _entrance.position = entrance_hit.position;
+            _queue.transform.position = entrance_hit.position;
+        }
+        if(NavMesh.SamplePosition(_exit.position, out NavMeshHit exit_hit, 10.0F, NavMesh.AllAreas)) _exit.position = exit_hit.position;
+    }
+
+    void Update()
+    {
+    
     }
 
     public int GetId()
@@ -33,17 +42,39 @@ public class Attraction : MonoBehaviour
 
     public Vector3 GetEntrancePosition()
     {
-        return entrance.position;
+        return _entrance.position;
     }
 
     public Vector3 GetQueuePosition()
     {
-        return queue_position.position;
+        return _queue.transform.position;
     }
 
-    public void addVisitor(Visitor new_visitor)
+    public bool IsFull()
     {
-        _queue.Enqueue(new_visitor);
-        queue_position.Translate(new_visitor.transform.position - new_visitor.transform.forward);
+        return _current_visitors.Count == _visitors_capacity;
+    }
+
+    public void BringInVisitor(GameObject new_visitor)
+    {
+        new_visitor.GetComponent<Visitor>().SetState(Visitor.State.IN_ATTRACTION);
+        new_visitor.SetActive(false);
+        _current_visitors.Enqueue(new_visitor);
+        StartCoroutine("RollVisitors");
+    }
+
+    private IEnumerator RollVisitors()
+    {
+        yield return new WaitForSeconds(5);
+        GameObject previous_visitor = _current_visitors.Dequeue();
+        previous_visitor.transform.position = _exit.position;
+        previous_visitor.SetActive(true);
+        previous_visitor.GetComponent<Visitor>().SetState(Visitor.State.WALKING);
+
+        if(_queue.ContainsVisitors())
+        {
+            GameObject first_in_queue = _queue.GetFirstInLine();
+            BringInVisitor(first_in_queue);
+        }
     }
 }

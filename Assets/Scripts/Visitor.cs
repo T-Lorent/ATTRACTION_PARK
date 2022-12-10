@@ -5,11 +5,9 @@ using UnityEngine.AI;
 public class Visitor : MonoBehaviour
 {
     /*====== PRIVATE ======*/
-    private enum State
+    public enum State
     {
-        READY_TO_GO,
         WALKING,
-        ARRIVED,
         WAITING,
         IN_ATTRACTION
     };
@@ -20,8 +18,8 @@ public class Visitor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _state = State.READY_TO_GO;
         _nav_mesh_agent = this.GetComponent<NavMeshAgent>();
+        SetState(State.WALKING);
     }
 
     // Update is called once per frame
@@ -29,10 +27,6 @@ public class Visitor : MonoBehaviour
     {
         switch (_state)
         {
-            case State.READY_TO_GO:
-                SetState(State.WALKING);
-                break;
-
             case State.WALKING:
                 Vector3 queue_position_position = AttractionsManager.Instance.attractions[_attraction_id].GetQueuePosition();
 
@@ -40,10 +34,6 @@ public class Visitor : MonoBehaviour
                 {
                     SetDestination(queue_position_position);
                 }
-                break;
-
-            case State.ARRIVED:
-
                 break;
 
             case State.WAITING:
@@ -59,19 +49,24 @@ public class Visitor : MonoBehaviour
         }
     }
 
-    private void SetState(State requested_state)
+    public void SetState(State requested_state)
     {
         switch (requested_state)
         {
             case State.WALKING:
-                if(_state == State.READY_TO_GO) SetDestinationToNewAttraction();
+                _nav_mesh_agent.avoidancePriority = 50;
+                SetDestinationToNewAttraction();
                 _state = State.WALKING;
                 break;
 
-            case State.ARRIVED:
+            case State.WAITING:
                 SetDestination(transform.position);
                 _nav_mesh_agent.avoidancePriority = 0;
-                _state = State.ARRIVED;
+                _state = State.WAITING;
+                break;
+
+            case State.IN_ATTRACTION:
+                // The Visitor is SetActive(False) in the Attraction class
                 break;
 
             default:
@@ -82,11 +77,11 @@ public class Visitor : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if(collision.gameObject.TryGetComponent(out QueuePosition queue_end))
+        if(collision.gameObject.TryGetComponent(out Queue queue_end))
         {
             if (queue_end.GetAttractionId() == _attraction_id)
             {
-                SetState(State.ARRIVED);
+                SetState(State.WAITING);
             }
         }
     }
@@ -97,7 +92,7 @@ public class Visitor : MonoBehaviour
         _nav_mesh_agent.SetDestination(AttractionsManager.Instance.attractions[_attraction_id].GetQueuePosition());
     }
 
-    private void SetDestination(Vector3 destination)
+    public void SetDestination(Vector3 destination)
     {
         _nav_mesh_agent.SetDestination(destination);
     }
