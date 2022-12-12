@@ -1665,7 +1665,7 @@ MonoBehaviour:
   _queue: {fileID: 5273721112945810453}
   _exit: {fileID: 1214466894608434742}
   _visitors_capacity: 1
-  _duration: 5
+  _duration: 10
 --- !u!4 &813873110295957004
 Transform:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class Visitor : MonoBehaviour
     public int _attraction_id { get; private set; }
 
     private NavMeshAgent _nav_mesh_agent = null;
-    private Visitor _before_in_line = null;
+    private Visitor _before_in_queue = null;
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +39,7 @@ public class Visitor : MonoBehaviour
                 break;
 
             case State.WAITING:
-                
+                FollowBeforeInQueue();
                 break;
             
             case State.IN_ATTRACTION:
@@ -88,8 +88,25 @@ public class Visitor : MonoBehaviour
         _nav_mesh_agent.SetDestination(destination);
     }
 
-    public void SetBeforeInLine(Visitor before_in_line)
+    public void SetBeforeInQueue(Visitor before_in_queue)
     {
-        _before_in_line = before_in_line;
+        _before_in_queue = before_in_queue;
+    }
+
+    private void FollowBeforeInQueue()
+    {
+        if(_before_in_queue != null )
+        {
+            Vector3 distance = transform.position - _before_in_queue.transform.position;
+
+            if (distance.sqrMagnitude > Queue.distance_between_visitors)
+            {
+                SetDestination(_before_in_queue.transform.position + distance.normalized * Queue.distance_between_visitors);
+            }
+        }
+        else
+        {
+            SetDestination(AttractionsManager.Instance.attractions[_attraction_id].GetEntrancePosition());
+        }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class Queue : MonoBehaviour
 {
+    static public float distance_between_visitors = 7.0F;
     private Attraction _attraction;
     private Queue<Visitor> _waiting_visitors = new Queue<Visitor>();
     private List<Visitor> _last_waiting_visitors = new List<Visitor>(3);
@@ -29,6 +30,7 @@ public class Queue : MonoBehaviour
     public Visitor GetFirstInLine()
     {
         Visitor first_in_line = _waiting_visitors.Dequeue();
+        _waiting_visitors.Peek().SetBeforeInQueue(null);
         UpdateLastInQueue();
         return first_in_line;
     }
@@ -50,6 +52,7 @@ public class Queue : MonoBehaviour
                 else
                 {
                     _waiting_visitors.Enqueue(new_visitor);
+                    if(_last_waiting_visitors.Count > 1) new_visitor.SetBeforeInQueue(_last_waiting_visitors[_last_waiting_visitors.Count - 1]);
                     UpdateLastInQueue(new_visitor);
                     StepBackQueueEnd();
                 }
@@ -81,12 +84,12 @@ public class Queue : MonoBehaviour
             /* MOVE QUEUE END TO NEXT POSITION */
             transform.position = position_3;
             transform.rotation *= Quaternion.FromToRotation(-transform.forward, position_2) * z_rotation;
-            transform.Translate(transform.forward * 6.0F);
+            transform.Translate(transform.forward * distance_between_visitors);
         }
         else
         {
             /* MOVE QUEUE END TO NEXT POSITION */
-            transform.Translate(Vector3.forward * 6.0F);
+            transform.Translate(Vector3.forward * distance_between_visitors);
         }
 
         /* MOVE THE COMPUTE POSITION TO A NAVMESH POSITION*/
