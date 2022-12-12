@@ -9,7 +9,7 @@ public class Attraction : MonoBehaviour
     [SerializeField] private Queue _queue;
     [SerializeField] private Transform _exit;
     [SerializeField] private int _visitors_capacity = 1;
-    [SerializeField] private Queue<GameObject> _current_visitors = new Queue<GameObject>();
+    [SerializeField] private Queue<Visitor> _current_visitors = new Queue<Visitor>();
     [SerializeField] private float _duration = 5F;
 
     private int _id;
@@ -55,26 +55,25 @@ public class Attraction : MonoBehaviour
         return _current_visitors.Count == _visitors_capacity;
     }
 
-    public void BringInVisitor(GameObject new_visitor)
+    public void BringInVisitor(Visitor new_visitor)
     {
-        new_visitor.GetComponent<Visitor>().SetState(Visitor.State.IN_ATTRACTION);
-        new_visitor.SetActive(false);
+        new_visitor.SetState(Visitor.State.IN_ATTRACTION);
+        new_visitor.gameObject.SetActive(false);
         _current_visitors.Enqueue(new_visitor);
         StartCoroutine("RollVisitors");
     }
 
     private IEnumerator RollVisitors()
     {
-        yield return new WaitForSeconds(5);
-        GameObject previous_visitor = _current_visitors.Dequeue();
+        yield return new WaitForSeconds(_duration);
+        Visitor previous_visitor = _current_visitors.Dequeue();
         previous_visitor.transform.position = _exit.position;
-        previous_visitor.SetActive(true);
-        previous_visitor.GetComponent<Visitor>().SetState(Visitor.State.WALKING);
+        previous_visitor.gameObject.SetActive(true);
+        previous_visitor.SetState(Visitor.State.WALKING);
 
         if(_queue.ContainsVisitors())
         {
-            GameObject first_in_queue = _queue.GetFirstInLine();
-            BringInVisitor(first_in_queue);
+            BringInVisitor(_queue.GetFirstInLine());
         }
     }
 }

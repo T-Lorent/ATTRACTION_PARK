@@ -12,8 +12,10 @@ public class Visitor : MonoBehaviour
         IN_ATTRACTION
     };
     private State _state;
-    private int _attraction_id;
     private NavMeshAgent _nav_mesh_agent = null;
+
+    private int _attraction_id;
+    private Visitor _before_in_line = null;
 
     // Start is called before the first frame update
     void Start()
@@ -95,5 +97,10 @@ public class Visitor : MonoBehaviour
     public void SetDestination(Vector3 destination)
     {
         _nav_mesh_agent.SetDestination(destination);
+    }
+
+    public void SetBeforeInLine(Visitor before_in_line)
+    {
+        _before_in_line = before_in_line;
     }
 }

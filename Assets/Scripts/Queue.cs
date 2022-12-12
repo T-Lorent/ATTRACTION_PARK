@@ -6,8 +6,8 @@ using UnityEngine.AI;
 public class Queue : MonoBehaviour
 {
     private Attraction _attraction;
-    private Queue<GameObject> _waiting_visitors = new Queue<GameObject>();
-    private GameObject[] _last_waiting_visitors = new GameObject[3];
+    private Queue<Visitor> _waiting_visitors = new Queue<Visitor>();
+    private List<Visitor> _last_waiting_visitors = new List<Visitor>(3);
     private Collider _collider;
 
     void Start()
@@ -31,10 +31,10 @@ public class Queue : MonoBehaviour
         return _waiting_visitors.Count > 0;
     }
 
-    public GameObject GetFirstInLine()
+    public Visitor GetFirstInLine()
     {
-        GameObject first_in_line = _waiting_visitors.Dequeue();
-        Advance(first_in_line.transform.position);
+        Visitor first_in_line = _waiting_visitors.Dequeue();
+        UpdateLastInQueue();
         return first_in_line;
     }
 
@@ -44,18 +44,14 @@ public class Queue : MonoBehaviour
         {
             _collider.enabled = false;
 
-            GameObject visitor_gameObject = collision.gameObject;
-
             if (!_attraction.IsFull())
             {
-                _attraction.BringInVisitor(visitor_gameObject);
+                _attraction.BringInVisitor(new_visitor);
             }
             else
             {
-                _waiting_visitors.Enqueue(visitor_gameObject);
-                _last_waiting_visitors[0] = _last_waiting_visitors[1];
-                _last_waiting_visitors[1] = _last_waiting_visitors[2];
-                _last_waiting_visitors[2] = visitor_gameObject;
+                _waiting_visitors.Enqueue(new_visitor);
+                UpdateLastInQueue(new_visitor);
                 StepBackQueueEnd();
             }
 
@@ -72,7 +68,7 @@ public class Queue : MonoBehaviour
             Vector3 position_1 = _last_waiting_visitors[0].transform.position;
             Vector3 position_2 = _last_waiting_visitors[1].transform.position;
             Vector3 position_3 = _last_waiting_visitors[2].transform.position;
-
+            
             Vector3 direction_1_to_2 = (position_2 - position_1).normalized;
             Vector3 direction_1_to_3 = (position_3 - position_1).normalized;
 
@@ -103,22 +99,37 @@ public class Queue : MonoBehaviour
         transform.rotation = _attraction.transform.rotation;
     }
 
-    private void Advance(Vector3 previous_position)
+    private void UpdateLastInQueue(Visitor last_visitor)
     {
-        if(!ContainsVisitors())
+        if(_last_waiting_visitors.Count < 3)
         {
-            transform.position = _attraction.GetEntrancePosition();
+            _last_waiting_visitors.Add(last_visitor);
         }
         else
         {
-            foreach (GameObject visitor in _waiting_visitors)
-            {
-                Vector3 current_visitor_position = visitor.transform.position;
-                visitor.GetComponent<Visitor>().SetDestination(previous_position);
-                previous_position = current_visitor_position;
-            }
+            List<Visitor> updated_last_in_queue = new List<Visitor>(3);
 
-            transform.position = previous_position;
+            for(int i = 1; i < _last_waiting_visitors.Count; ++i)
+            {
+                updated_last_in_queue.Add(_last_waiting_visitors[i]);
+            }
+            
+            updated_last_in_queue.Add(last_visitor);
+            _last_waiting_visitors = updated_last_in_queue;
+            
+        }
+    }
+
+    private void UpdateLastInQueue()
+    {
+        if(_waiting_visitors.Count < 3)
+        {
+            _last_waiting_visitors = new List<Visitor>(3);
+
+            foreach(Visitor last_in_queue in _waiting_visitors)
+            {
+                _last_waiting_visitors.Add(last_in_queue);
+            }
         }
     }
 }
