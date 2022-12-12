@@ -32,7 +32,7 @@ public class Visitor : MonoBehaviour
             case State.WALKING:
                 Vector3 queue_position_position = AttractionsManager.Instance.attractions[_attraction_id].GetQueuePosition();
 
-                if ((_nav_mesh_agent.destination - queue_position_position).sqrMagnitude > 0.05)
+                if ((_nav_mesh_agent.destination - queue_position_position).magnitude > 0.05)
                 {
                     SetDestination(queue_position_position);
                 }
@@ -99,7 +99,7 @@ public class Visitor : MonoBehaviour
         {
             Vector3 distance = transform.position - _before_in_queue.transform.position;
 
-            if (distance.sqrMagnitude > Queue.distance_between_visitors)
+            if (distance.magnitude > Queue.distance_between_visitors)
             {
                 SetDestination(_before_in_queue.transform.position + distance.normalized * Queue.distance_between_visitors);
             }

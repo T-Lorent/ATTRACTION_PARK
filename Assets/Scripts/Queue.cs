@@ -17,6 +17,13 @@ public class Queue : MonoBehaviour
         _collider = this.GetComponent<Collider>();
     }
 
+    void Update()
+    {
+
+        if (_last_waiting_visitors.Count > 0 && (transform.position - _last_waiting_visitors[_last_waiting_visitors.Count-1].transform.position).magnitude > distance_between_visitors)
+            UpdateQueueEndPosition();
+    }
+
     public Vector3 GetPosition()
     {
         return transform.position;
@@ -54,7 +61,7 @@ public class Queue : MonoBehaviour
                     _waiting_visitors.Enqueue(new_visitor);
                     if(_last_waiting_visitors.Count > 1) new_visitor.SetBeforeInQueue(_last_waiting_visitors[_last_waiting_visitors.Count - 1]);
                     UpdateLastInQueue(new_visitor);
-                    StepBackQueueEnd();
+                    UpdateQueueEndPosition();
                 }
 
                 _collider.enabled = true;
@@ -62,7 +69,7 @@ public class Queue : MonoBehaviour
         }
     }
 
-    private void StepBackQueueEnd()
+    private void UpdateQueueEndPosition()
     {
         // Replacing queue position
         if (_waiting_visitors.Count >= 3)
@@ -86,9 +93,10 @@ public class Queue : MonoBehaviour
             transform.rotation *= Quaternion.FromToRotation(-transform.forward, position_2) * z_rotation;
             transform.Translate(transform.forward * distance_between_visitors);
         }
-        else
+        else if(ContainsVisitors())
         {
             /* MOVE QUEUE END TO NEXT POSITION */
+            transform.position = _last_waiting_visitors[_last_waiting_visitors.Count-1].transform.position;
             transform.Translate(Vector3.forward * distance_between_visitors);
         }
 
