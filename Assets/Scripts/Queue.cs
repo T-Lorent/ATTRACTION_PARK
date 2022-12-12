@@ -15,11 +15,6 @@ public class Queue : MonoBehaviour
         _attraction = transform.parent.GetComponent<Attraction>();
         _collider = this.GetComponent<Collider>();
     }
-    
-    public int GetAttractionId()
-    {
-        return _attraction.GetId();
-    }
 
     public Vector3 GetPosition()
     {
@@ -42,20 +37,25 @@ public class Queue : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out Visitor new_visitor))
         {
-            _collider.enabled = false;
-
-            if (!_attraction.IsFull())
+            if(new_visitor._state == Visitor.State.WALKING && new_visitor._attraction_id == _attraction.GetId())
             {
-                _attraction.BringInVisitor(new_visitor);
-            }
-            else
-            {
-                _waiting_visitors.Enqueue(new_visitor);
-                UpdateLastInQueue(new_visitor);
-                StepBackQueueEnd();
-            }
+                _collider.enabled = false;
 
-            _collider.enabled = true;
+                new_visitor.SetState(Visitor.State.WAITING);
+                
+                if (!_attraction.IsFull())
+                {
+                    _attraction.BringInVisitor(new_visitor);
+                }
+                else
+                {
+                    _waiting_visitors.Enqueue(new_visitor);
+                    UpdateLastInQueue(new_visitor);
+                    StepBackQueueEnd();
+                }
+
+                _collider.enabled = true;
+            }
         }
     }
 

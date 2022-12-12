@@ -11,10 +11,10 @@ public class Visitor : MonoBehaviour
         WAITING,
         IN_ATTRACTION
     };
-    private State _state;
-    private NavMeshAgent _nav_mesh_agent = null;
+    public State _state { get; private set; }
+    public int _attraction_id { get; private set; }
 
-    private int _attraction_id;
+    private NavMeshAgent _nav_mesh_agent = null;
     private Visitor _before_in_line = null;
 
     // Start is called before the first frame update
@@ -74,17 +74,6 @@ public class Visitor : MonoBehaviour
             default:
                 _state = requested_state;
                 break;
-        }
-    }
-
-    private void OnTriggerEnter(Collider collision)
-    {
-        if(collision.gameObject.TryGetComponent(out Queue queue_end))
-        {
-            if (queue_end.GetAttractionId() == _attraction_id)
-            {
-                SetState(State.WAITING);
-            }
         }
     }
 
