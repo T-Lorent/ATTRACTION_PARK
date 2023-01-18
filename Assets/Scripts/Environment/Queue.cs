@@ -8,20 +8,13 @@ public class Queue : MonoBehaviour
     static public float distance_between_visitors = 7.0F;
     private Attraction _attraction;
     private Queue<Visitor> _waiting_visitors = new Queue<Visitor>();
-    private List<Visitor> _last_waiting_visitors = new List<Visitor>(3);
+    private Visitor _last_in_queue = null;
     private Collider _collider;
 
     void Start()
     {
         _attraction = transform.parent.GetComponent<Attraction>();
         _collider = this.GetComponent<Collider>();
-    }
-
-    void Update()
-    {
-
-        if (_last_waiting_visitors.Count > 0 && (transform.position - _last_waiting_visitors[_last_waiting_visitors.Count-1].transform.position).magnitude > distance_between_visitors)
-            UpdateQueueEndPosition();
     }
 
     public Vector3 GetPosition()
@@ -37,8 +30,16 @@ public class Queue : MonoBehaviour
     public Visitor GetFirstInLine()
     {
         Visitor first_in_line = _waiting_visitors.Dequeue();
-        if(ContainsVisitors()) _waiting_visitors.Peek().SetBeforeInQueue(null);
-        UpdateLastInQueue();
+        if (ContainsVisitors())
+        {
+            _waiting_visitors.Peek().SetBeforeInQueue(null);
+        }
+        else
+        {
+            _last_in_queue = null;
+            transform.parent = null;
+            transform.position = _attraction.GetEntrancePosition();
+        }
         return first_in_line;
     }
 
@@ -59,87 +60,13 @@ public class Queue : MonoBehaviour
                 else
                 {
                     _waiting_visitors.Enqueue(new_visitor);
-                    if(_last_waiting_visitors.Count > 1) new_visitor.SetBeforeInQueue(_last_waiting_visitors[_last_waiting_visitors.Count - 1]);
-                    UpdateLastInQueue(new_visitor);
-                    UpdateQueueEndPosition();
+                    if(_last_in_queue != null) new_visitor.SetBeforeInQueue(_last_in_queue);
+                    _last_in_queue = new_visitor;
+                    transform.position = new_visitor.transform.position;
+                    transform.parent = new_visitor.transform;
                 }
 
                 _collider.enabled = true;
-            }
-        }
-    }
-
-    private void UpdateQueueEndPosition()
-    {
-        // Replacing queue position
-        if (_waiting_visitors.Count >= 3)
-        {
-            /* Store the position of the 3 last visitors in queue */
-            Vector3 position_1 = _last_waiting_visitors[0].transform.position;
-            Vector3 position_2 = _last_waiting_visitors[1].transform.position;
-            Vector3 position_3 = _last_waiting_visitors[2].transform.position;
-            
-            Vector3 direction_1_to_2 = (position_2 - position_1).normalized;
-            Vector3 direction_1_to_3 = (position_3 - position_1).normalized;
-
-            /* Compute divergent angle between waiters on XZ plan */
-            Quaternion z_rotation = Quaternion.FromToRotation(
-                new Vector3(direction_1_to_2.x, 0, direction_1_to_2.z),
-                new Vector3(direction_1_to_3.x, 0, direction_1_to_3.z)
-            );
-
-            /* MOVE QUEUE END TO NEXT POSITION */
-            transform.position = position_3;
-            transform.rotation *= Quaternion.FromToRotation(-transform.forward, position_2) * z_rotation;
-            transform.Translate(transform.forward * distance_between_visitors);
-        }
-        else if(ContainsVisitors())
-        {
-            /* MOVE QUEUE END TO NEXT POSITION */
-            transform.position = _last_waiting_visitors[_last_waiting_visitors.Count-1].transform.position;
-            transform.Translate(Vector3.forward * distance_between_visitors);
-        }
-
-        /* MOVE THE COMPUTE POSITION TO A NAVMESH POSITION*/
-        if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5.0F, NavMesh.AllAreas))
-        {
-            transform.position = hit.position;
-        }
-
-        /* RESET END QUEUE ROTATION */
-        transform.rotation = _attraction.transform.rotation;
-    }
-
-    private void UpdateLastInQueue(Visitor last_visitor)
-    {
-        if(_last_waiting_visitors.Count < 3)
-        {
-            _last_waiting_visitors.Add(last_visitor);
-        }
-        else
-        {
-            List<Visitor> updated_last_in_queue = new List<Visitor>(3);
-
-            for(int i = 1; i < _last_waiting_visitors.Count; ++i)
-            {
-                updated_last_in_queue.Add(_last_waiting_visitors[i]);
-            }
-            
-            updated_last_in_queue.Add(last_visitor);
-            _last_waiting_visitors = updated_last_in_queue;
-            
-        }
-    }
-
-    private void UpdateLastInQueue()
-    {
-        if(_waiting_visitors.Count < 3)
-        {
-            _last_waiting_visitors = new List<Visitor>(3);
-
-            foreach(Visitor last_in_queue in _waiting_visitors)
-            {
-                _last_waiting_visitors.Add(last_in_queue);
             }
         }
     }
