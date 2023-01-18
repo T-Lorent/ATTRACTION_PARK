@@ -37,7 +37,7 @@ public class Queue : MonoBehaviour
     public Visitor GetFirstInLine()
     {
         Visitor first_in_line = _waiting_visitors.Dequeue();
-        _waiting_visitors.Peek().SetBeforeInQueue(null);
+        if(ContainsVisitors()) _waiting_visitors.Peek().SetBeforeInQueue(null);
         UpdateLastInQueue();
         return first_in_line;
     }
