@@ -89,7 +89,6 @@ public class AgentsManager : MonoBehaviour
 
     public Vector3 GetRandomPosition()
     {
-        //1. Pick a point
         float coord_x;
         float coord_z;
 
@@ -98,8 +97,9 @@ public class AgentsManager : MonoBehaviour
 
         do
         {
-            coord_x = UnityEngine.Random.Range(0, 400);
-            coord_z = UnityEngine.Random.Range(0, 400);
+            //1. Pick a point
+            coord_x = UnityEngine.Random.Range(GroundManager.Instance.X_MIN, GroundManager.Instance.X_MAX);
+            coord_z = UnityEngine.Random.Range(GroundManager.Instance.Z_MIN, GroundManager.Instance.Z_MAX);
         } while (!NavMesh.SamplePosition(new Vector3(coord_x, 20.0F, coord_z), out hit, 20.0f, NavMesh.AllAreas));
 
         random_position = hit.position;
