@@ -100,7 +100,7 @@ public class AgentsManager : MonoBehaviour
             //1. Pick a point
             coord_x = UnityEngine.Random.Range(GroundManager.Instance.X_MIN, GroundManager.Instance.X_MAX);
             coord_z = UnityEngine.Random.Range(GroundManager.Instance.Z_MIN, GroundManager.Instance.Z_MAX);
-        } while (!NavMesh.SamplePosition(new Vector3(coord_x, 20.0F, coord_z), out hit, 20.0f, NavMesh.AllAreas));
+        } while (!NavMesh.SamplePosition(new Vector3(coord_x, -10.0F, coord_z), out hit, 20.0f, NavMesh.AllAreas));
 
         random_position = hit.position;
 

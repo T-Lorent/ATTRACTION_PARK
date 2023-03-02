@@ -1,9 +1,10 @@
-﻿//===========================================================================//
+//===========================================================================//
 //                       FreeFlyCamera (Version 1.2)                         //
 //                        (c) 2019 Sergey Stafeyev                           //
 //===========================================================================//
 
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(Camera))]
 public class FreeFlyCamera : MonoBehaviour
@@ -88,6 +89,10 @@ public class FreeFlyCamera : MonoBehaviour
     private Vector3 _initPosition;
     private Vector3 _initRotation;
 
+    [SerializeField] private Transform _body;
+    [SerializeField] private Transform _orientation;
+    private bool freefly = false;
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
@@ -99,8 +104,17 @@ public class FreeFlyCamera : MonoBehaviour
 
     private void Start()
     {
-        _initPosition = transform.position;
+        NavMeshHit hit;
+        NavMesh.SamplePosition(new Vector3(_body.position.x, -10.0F, _body.position.z), out hit, 20.0f, NavMesh.AllAreas);
+        Debug.Log(hit.position);
+        _body.position = hit.position;
+        _initPosition = _body.position;
         _initRotation = transform.eulerAngles;
+        _orientation.rotation = transform.rotation * Quaternion.Euler(
+            -transform.eulerAngles.x,
+            0,
+            0
+        );
     }
 
     private void OnEnable()
@@ -168,27 +182,27 @@ public class FreeFlyCamera : MonoBehaviour
                 currentSpeed = _boostedSpeed;
 
             if (Input.GetKey(KeyCode.W))
-                deltaPosition += transform.forward;
+                deltaPosition += _orientation.forward;
 
             if (Input.GetKey(KeyCode.S))
-                deltaPosition -= transform.forward;
+                deltaPosition -= _orientation.forward;
 
             if (Input.GetKey(KeyCode.A))
-                deltaPosition -= transform.right;
+                deltaPosition -= _orientation.right;
 
             if (Input.GetKey(KeyCode.D))
-                deltaPosition += transform.right;
+                deltaPosition += _orientation.right;
 
-            if (Input.GetKey(_moveUp))
-                deltaPosition += transform.up;
+            if (freefly && Input.GetKey(_moveUp))
+                deltaPosition += _body.up;
 
-            if (Input.GetKey(_moveDown))
-                deltaPosition -= transform.up;
+            if (freefly && Input.GetKey(_moveDown))
+                deltaPosition -= _body.up;
 
             // Calc acceleration
             CalculateCurrentIncrease(deltaPosition != Vector3.zero);
 
-            transform.position += deltaPosition * currentSpeed * _currentIncrease;
+            _body.position += deltaPosition * currentSpeed * _currentIncrease;
         }
 
         // Rotation
@@ -206,12 +220,18 @@ public class FreeFlyCamera : MonoBehaviour
                 transform.eulerAngles.y + Input.GetAxis("Mouse X") * _mouseSense,
                 transform.eulerAngles.z
             );
+
+            _orientation.rotation = transform.rotation * Quaternion.Euler(
+                -transform.eulerAngles.x,
+                0,
+                0
+            );
         }
 
         // Return to init position
         if (Input.GetKeyDown(_initPositonButton))
         {
-            transform.position = _initPosition;
+            _body.position = _initPosition;
             transform.eulerAngles = _initRotation;
         }
     }

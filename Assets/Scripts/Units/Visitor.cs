@@ -64,7 +64,7 @@ public class Visitor : MonoBehaviour
 
             case State.WAITING:
                 SetDestination(transform.position);
-                _nav_mesh_agent.avoidancePriority = 0;
+                _nav_mesh_agent.avoidancePriority = 1;
                 _state = State.WAITING;
                 break;
 
