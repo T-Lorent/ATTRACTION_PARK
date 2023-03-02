@@ -5,75 +5,55 @@ ModelImporter:
   internalIDToNameTable: []
   externalObjects:
   - first:
-      type: UnityEngine:Texture2D
+      type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: lambert10SG_baseColor
-    second: {fileID: 2800000, guid: 7ded45d5922de074bb8c6035fd797e6c, type: 3}
+      name: Ligth
+    second: {fileID: 2100000, guid: 33ebfc2e59e11614a90e815ded687277, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Red Wood
+    second: {fileID: 2100000, guid: 788b523f081d9b04db9ad8dc10de0054, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rock
+    second: {fileID: 2100000, guid: 0e384b7ba3adc0346acc0093fd794e76, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Roof
+    second: {fileID: 2100000, guid: b7cec4233e272134388a4adb7b3110b6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert11SG
+    second: {fileID: 2100000, guid: 565845d10b0d1144fadfb8c9f5340480, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert7SG
+    second: {fileID: 2100000, guid: 91f9e3de2c75c4849a12c8b25a04013e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal
+    second: {fileID: 2100000, guid: 5d60a57acbb5a824f8bbb65fa47e5562, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: lambert11SG_baseColor
-    second: {fileID: 2800000, guid: 5b485d4c8050fcf43843746517cf3b7a, type: 3}
+    second: {fileID: 2800000, guid: d3d5dccbe73b89e4b985aebe5215f426, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: lambert11SG_normal
-    second: {fileID: 2800000, guid: 90b034394025ba74db5c2a2ef98e49b9, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert13SG_baseColor
-    second: {fileID: 2800000, guid: 3facd669657a6cf4684c728af5220277, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert13SG_normal
-    second: {fileID: 2800000, guid: 5bfe98eaea1391e46acd0cc9b34e19a8, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert2SG_baseColor
-    second: {fileID: 2800000, guid: 7b839032524c7784e8f07566067aaa8c, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert4SG_baseColor
-    second: {fileID: 2800000, guid: a25f41d16e6069249b8cb46f7a672879, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert6SG_baseColor
-    second: {fileID: 2800000, guid: 875080546c9e69f4b897aa950c1e5b9b, type: 3}
+    second: {fileID: 2800000, guid: 386002d3ef4f3f641b8b96c58eb5bf4c, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: lambert6SG_normal
-    second: {fileID: 2800000, guid: 5b7179bcb4692184f93b2253cff031e2, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert7SG_normal
-    second: {fileID: 2800000, guid: 5185928057ae38848afa8d8b97ec5c4c, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert8SG_baseColor
-    second: {fileID: 2800000, guid: d7751cc20f73cd243baf1730f8b4c367, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert8SG_normal
-    second: {fileID: 2800000, guid: df51e29a7628a6c4dbe45cb7556319d5, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert9SG_baseColor
-    second: {fileID: 2800000, guid: 95caf3546fa48d340ab890fff9b98b90, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: lambert9SG_normal
-    second: {fileID: 2800000, guid: b167de8eb0a78df4ab636f8ddd3183f2, type: 3}
+    second: {fileID: 2800000, guid: b7d21848ee074a645b01ec2211a8ae60, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
