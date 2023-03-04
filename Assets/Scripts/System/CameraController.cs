@@ -31,7 +31,7 @@ public class FreeFlyCamera : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Camera zooming in/out by 'Mouse Scroll Wheel' is active")]
-    private bool _enableTranslation = true;
+    private bool _enableTranslation = false;
 
     [SerializeField]
     [Tooltip("Velocity of camera zooming in/out")]
@@ -67,7 +67,7 @@ public class FreeFlyCamera : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Acceleration at camera movement is active")]
-    private bool _enableSpeedAcceleration = true;
+    private bool _enableSpeedAcceleration = false;
 
     [SerializeField]
     [Tooltip("Rate which is applied during camera movement")]
@@ -91,7 +91,7 @@ public class FreeFlyCamera : MonoBehaviour
 
     [SerializeField] private Transform _body;
     [SerializeField] private Transform _orientation;
-    private bool freefly = false;
+    private bool _freefly = false;
 
 #if UNITY_EDITOR
     private void OnValidate()
@@ -104,18 +104,38 @@ public class FreeFlyCamera : MonoBehaviour
 
     private void Start()
     {
-        NavMeshHit hit;
-        NavMesh.SamplePosition(new Vector3(_body.position.x, -10.0F, _body.position.z), out hit, 20.0f, NavMesh.AllAreas);
-        
-        _body.position = hit.position;
         _initPosition = _body.position;
         _initRotation = transform.eulerAngles;
+
+        SetConstrainMode();
     }
 
     private void OnEnable()
     {
         if (_active)
             _wantedMode = CursorLockMode.Locked;
+    }
+
+    private void SetConstrainMode()
+    {
+        _freefly = false;
+        _enableTranslation = false;
+        _enableSpeedAcceleration = false;
+
+        _body.GetComponent<NavMeshAgent>().enabled = true;
+
+        NavMeshHit hit;
+        NavMesh.SamplePosition(new Vector3(_body.position.x, -10.0F, _body.position.z), out hit, 50.0f, NavMesh.AllAreas);
+
+        _body.position = hit.position;
+    }
+
+    private void SetFreeflyMode()
+    {
+        _body.GetComponent<NavMeshAgent>().enabled = false;
+        _freefly = true;
+        _enableTranslation = true;
+        _enableSpeedAcceleration = true;
     }
 
     // Apply requested cursor state
@@ -161,6 +181,15 @@ public class FreeFlyCamera : MonoBehaviour
         if (Cursor.visible)
             return;
 
+        // Mode
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (_freefly)
+                SetConstrainMode();
+            else
+                SetFreeflyMode();
+        }
+
         // Translation
         if (_enableTranslation)
         {
@@ -188,10 +217,10 @@ public class FreeFlyCamera : MonoBehaviour
             if (Input.GetKey(KeyCode.D))
                 deltaPosition += _orientation.right;
 
-            if (freefly && Input.GetKey(_moveUp))
+            if (_freefly && Input.GetKey(_moveUp))
                 deltaPosition += _body.up;
 
-            if (freefly && Input.GetKey(_moveDown))
+            if (_freefly && Input.GetKey(_moveDown))
                 deltaPosition -= _body.up;
 
             // Calc acceleration
