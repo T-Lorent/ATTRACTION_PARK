@@ -257,6 +257,7 @@ public class FreeFlyCamera : MonoBehaviour
         {
             _body.position = _initPosition;
             transform.eulerAngles = _initRotation;
+            SetConstrainMode();
         }
     }
 }

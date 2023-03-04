@@ -16,5 +16,6 @@ On free fly mode only :
 
 ### ➡️ OTHERS
 - <kbd>C</kbd> : Change camera mode (Constain | Free fly);
+- <kbd>R</kbd> : Reset camera to initial position and mode;
 - <kbd>O</kbd> : Add Visitors on map;
 - <kbd>P</kbd> : Add Walkers on map.
