@@ -14,11 +14,11 @@ public class AgentsManager : MonoBehaviour
     public Visitor visitor_prefab;
 
     [Header("WALKERS MANAGEMENT (CROWD)")]
-    public int walker_number = 25;
+    public int walker_number = 50;
     public int walker_increment = 25;
 
     [Header("VISITORS MANAGEMENT")]
-    public int visitor_number = 25;
+    public int visitor_number = 50;
     public int visitor_increment = 25;
 
     /*====== PRIVATE ======*/
