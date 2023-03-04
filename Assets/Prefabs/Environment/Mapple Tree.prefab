@@ -310,7 +310,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 00f235b4d51cee94884eae250707ccda, type: 2}
+  - {fileID: 2100000, guid: 27ad74e42df04a34f9238d35006ad656, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -682,7 +682,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 93963aab90532984f9cb950890150941, type: 2}
+  - {fileID: 2100000, guid: a967d4f564f62e44e8268a6b36c95559, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1214,7 +1214,7 @@ Transform:
   - {fileID: 2774055940914627706}
   - {fileID: 6815491695411018383}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -56.5, z: 0}
 --- !u!208 &8119859159172490503
 NavMeshObstacle:
