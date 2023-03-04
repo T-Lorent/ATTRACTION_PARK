@@ -37,7 +37,7 @@ public class Queue : MonoBehaviour
         else
         {
             _last_in_queue = null;
-            transform.parent = null;
+            transform.parent = _attraction.gameObject.transform;
             transform.position = _attraction.GetEntrancePosition();
         }
         return first_in_line;

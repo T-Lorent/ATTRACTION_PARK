@@ -25,11 +25,6 @@ public class Attraction : MonoBehaviour
         if(NavMesh.SamplePosition(_exit.position, out NavMeshHit exit_hit, 10.0F, NavMesh.AllAreas)) _exit.position = exit_hit.position;
     }
 
-    void Update()
-    {
-    
-    }
-
     public int GetId()
     {
         return _id;
