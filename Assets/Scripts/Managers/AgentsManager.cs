@@ -26,10 +26,9 @@ public class AgentsManager : MonoBehaviour
     private List<Visitor> visitors = new List<Visitor>();
 
     /*====== UNITY METHODS ======*/
-    void Awake() => Instance = this;
+    private void Awake() => Instance = this;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         // WALKERS
         for(int i=0; i < walker_number; ++i)
@@ -41,6 +40,24 @@ public class AgentsManager : MonoBehaviour
         for(int i=0; i < visitor_number; ++i)
         {
             CreateVisitor();
+        }
+
+        UIManager.Instance.update_nb_agents(
+            visitors.Count,
+            walkers.Count
+        );
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            AddVisitors();
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            AddWalkers();
         }
     }
 
@@ -76,6 +93,11 @@ public class AgentsManager : MonoBehaviour
         {
             CreateWalker();
         }
+
+        UIManager.Instance.update_nb_agents(
+            visitors.Count,
+            walkers.Count
+        );
     }
 
     public void AddVisitors(){
@@ -85,6 +107,11 @@ public class AgentsManager : MonoBehaviour
         {
             CreateVisitor();
         }
+
+        UIManager.Instance.update_nb_agents(
+            visitors.Count,
+            walkers.Count
+        );
     }
 
     public Vector3 GetRandomPosition()
