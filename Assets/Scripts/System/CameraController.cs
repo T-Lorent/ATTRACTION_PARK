@@ -106,7 +106,7 @@ public class FreeFlyCamera : MonoBehaviour
     {
         NavMeshHit hit;
         NavMesh.SamplePosition(new Vector3(_body.position.x, -10.0F, _body.position.z), out hit, 20.0f, NavMesh.AllAreas);
-        Debug.Log(hit.position);
+        
         _body.position = hit.position;
         _initPosition = _body.position;
         _initRotation = transform.eulerAngles;
