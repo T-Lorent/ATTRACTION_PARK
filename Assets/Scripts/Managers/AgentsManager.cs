@@ -30,6 +30,8 @@ public class AgentsManager : MonoBehaviour
     private List<Walker> walkers = new List<Walker>();
     private List<Visitor> visitors = new List<Visitor>();
     private List<Vector3> spawnable_case = new List<Vector3>();
+    private float caseSizeX;
+    private float caseSizeZ;
 
     
 
@@ -38,6 +40,8 @@ public class AgentsManager : MonoBehaviour
 
     private void Start()
     {
+
+       NavMesh.pathfindingIterationsPerFrame= 1000;
         CreateSpawnGrid();
 
         // WALKERS
@@ -136,9 +140,13 @@ public class AgentsManager : MonoBehaviour
             random = UnityEngine.Random.Range(0, spawnable_case.Count);
 
         } while (!NavMesh.SamplePosition(new Vector3(spawnable_case[random].x, -10.0f, spawnable_case[random].z), out hit, 50.0f, NavMesh.AllAreas));
+
+        //We calcul an offset from the center of the case
+        float position_offset_x = UnityEngine.Random.Range(-caseSizeX/2f, caseSizeX/2f);
+        float position_offset_z = UnityEngine.Random.Range(-caseSizeZ/2f, caseSizeZ/2f);
         random_position = hit.position;
 
-        return random_position;
+        return new Vector3(random_position.x + position_offset_x, random_position.y, random_position.z + position_offset_z);
     }
 
 
@@ -154,8 +162,8 @@ public class AgentsManager : MonoBehaviour
         float maxCoordX = minCoordX + terrain.terrainData.size.x;
         float maxCoordZ = minCoordZ + terrain.terrainData.size.z;
 
-        float caseSizeX= (maxCoordX - minCoordX) / grid_size;
-        float caseSizeZ= (maxCoordZ - minCoordZ) / grid_size;
+        caseSizeX= (maxCoordX - minCoordX) / grid_size;
+        caseSizeZ= (maxCoordZ - minCoordZ) / grid_size;
 
         Vector2 center = new Vector2(caseSizeX/2f, caseSizeZ/2f);
 
