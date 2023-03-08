@@ -29,9 +29,9 @@ public class AgentsManager : MonoBehaviour
     /*====== PRIVATE ======*/
     private List<Walker> walkers = new List<Walker>();
     private List<Visitor> visitors = new List<Visitor>();
-    private List<Vector3> spawnable_case = new List<Vector3>();
-    private float caseSizeX;
-    private float caseSizeZ;
+    private List<Vector3> spawnable_cell = new List<Vector3>();
+    private float cellSizeX;
+    private float cellSizeZ;
 
     
 
@@ -134,16 +134,16 @@ public class AgentsManager : MonoBehaviour
         Vector3 random_position = Vector3.zero;
         int random;
 
-        //We calcul an offset from the center of the case
-        float position_offset_x = UnityEngine.Random.Range(-caseSizeX/2f, caseSizeX/2f);
-        float position_offset_z = UnityEngine.Random.Range(-caseSizeZ/2f, caseSizeZ/2f);
+        //We calcul an offset from the center of the cell
+        float position_offset_x = UnityEngine.Random.Range(-cellSizeX/2f, cellSizeX/2f);
+        float position_offset_z = UnityEngine.Random.Range(-cellSizeZ/2f, cellSizeZ/2f);
 
         do
         {
-            //1. Pick a random index in spawnable case range
-            random = UnityEngine.Random.Range(0, spawnable_case.Count);
+            //1. Pick a random index in spawnable cell range
+            random = UnityEngine.Random.Range(0, spawnable_cell.Count);
 
-        } while (!NavMesh.SamplePosition(new Vector3(spawnable_case[random].x+position_offset_x, -10.0f, spawnable_case[random].z+position_offset_z), out hit, 50.0f, NavMesh.AllAreas));
+        } while (!NavMesh.SamplePosition(new Vector3(spawnable_cell[random].x+position_offset_x, -10.0f, spawnable_cell[random].z+position_offset_z), out hit, 50.0f, NavMesh.AllAreas));
 
         random_position = hit.position;
 
@@ -156,31 +156,31 @@ public class AgentsManager : MonoBehaviour
     {
         float lake_height = lake.transform.position.y + (lake.transform.localScale.y/2);
 
-        //We compute the size of each case of the grid
+        //We compute the size of each cell of the grid
         float minCoordX = terrain.transform.position.x;
         float minCoordZ = terrain.transform.position.z;
 
         float maxCoordX = minCoordX + terrain.terrainData.size.x;
         float maxCoordZ = minCoordZ + terrain.terrainData.size.z;
 
-        caseSizeX= (maxCoordX - minCoordX) / grid_size;
-        caseSizeZ= (maxCoordZ - minCoordZ) / grid_size;
+        cellSizeX= (maxCoordX - minCoordX) / grid_size;
+        cellSizeZ= (maxCoordZ - minCoordZ) / grid_size;
 
-        Vector2 center = new Vector2(caseSizeX/2f, caseSizeZ/2f);
+        Vector2 center = new Vector2(cellSizeX/2f, cellSizeZ/2f);
 
         for(int i=0; i< grid_size; ++i)
         {
             for(int j=0; j< grid_size; ++j)
             {
-                float positionX = i*caseSizeX + center.x + minCoordX;
-                float positionZ = j*caseSizeZ + center.y + minCoordZ;
+                float positionX = i*cellSizeX + center.x + minCoordX;
+                float positionZ = j*cellSizeZ + center.y + minCoordZ;
 
 
                 float height = terrain.SampleHeight(new Vector3(positionX, 0, positionZ));
-                //We only take cases that are not in the lake
+                //We only take cells that are not in the lake
                 if(height > lake_height)
                 {
-                    spawnable_case.Add(new Vector3(positionX, height, positionZ));
+                    spawnable_cell.Add(new Vector3(positionX, height, positionZ));
                 }
             }
         }
