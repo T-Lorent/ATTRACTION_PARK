@@ -134,20 +134,20 @@ public class AgentsManager : MonoBehaviour
         Vector3 random_position = Vector3.zero;
         int random;
 
+        //We calcul an offset from the center of the case
+        float position_offset_x = UnityEngine.Random.Range(-caseSizeX/2f, caseSizeX/2f);
+        float position_offset_z = UnityEngine.Random.Range(-caseSizeZ/2f, caseSizeZ/2f);
+
         do
         {
             //1. Pick a random index in spawnable case range
             random = UnityEngine.Random.Range(0, spawnable_case.Count);
 
-        } while (!NavMesh.SamplePosition(new Vector3(spawnable_case[random].x, -10.0f, spawnable_case[random].z), out hit, 50.0f, NavMesh.AllAreas));
-
-        //We calcul an offset from the center of the case
-        float position_offset_x = UnityEngine.Random.Range(-caseSizeX/2f, caseSizeX/2f);
-        float position_offset_z = UnityEngine.Random.Range(-caseSizeZ/2f, caseSizeZ/2f);
+        } while (!NavMesh.SamplePosition(new Vector3(spawnable_case[random].x+position_offset_x, -10.0f, spawnable_case[random].z+position_offset_z), out hit, 50.0f, NavMesh.AllAreas));
 
         random_position = hit.position;
 
-        return new Vector3(random_position.x + position_offset_x, random_position.y, random_position.z + position_offset_z);
+        return new Vector3(random_position.x, random_position.y, random_position.z);
     }
 
 

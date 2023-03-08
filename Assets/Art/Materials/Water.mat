@@ -8,18 +8,21 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Water
-  m_Shader: {fileID: 45, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: d54a881b830cae544a72985daaece999, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _ENABLEPROBERELFECTIONS_ON
+  - _ENABLEREALTIMEREFLECTIONS_ON
+  - _ENABLEREFLECTIONS_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _ShoreTex
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -43,6 +46,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _FoamTexture:
+        m_Texture: {fileID: 2800000, guid: 6cb123095ca4b4e4680773312ba1c076, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -51,11 +58,19 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalTexture:
+        m_Texture: {fileID: 2800000, guid: 0d05b23ea2d999b47825c6c522e25adc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ReflectionTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -67,22 +82,52 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
+    - _Density: 0.522
+    - _DepthTransparency: 0
     - _DetailNormalMapScale: 1
+    - _DistanceFade: 0.5
+    - _Distortion: 0.1
     - _DstBlend: 0
+    - _EnableProbeRelfections: 1
+    - _EnableRealtimeReflections: 1
+    - _Fade: 2.05
+    - _FarTilingDistance: 1000
+    - _FoamBlend: 1
+    - _FoamContrast: 0.25
+    - _FoamIntensity: 2
+    - _FoamSpeed: 0.1
+    - _FoamTiling: 0.16
+    - _FoamVisibility: 0.1
+    - _Gloss: 0.7
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LightWrapping: 2
+    - _MediumTilingDistance: 100
     - _Metallic: 0
     - _Mode: 0
+    - _NormalStrength: 0.22
+    - _NormalTiling: 0.01
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ProbeReflectionIntensity: 0.8
+    - _RealtimeReflectionIntensity: 0.25
+    - _Refraction: 0.285
     - _SmoothnessTextureChannel: 0
+    - _Specular: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _TransparencyFade: 1
     - _UVSec: 0
+    - _WaveSpeed: 0.1
     - _ZWrite: 1
+    - __dirty: 1
     m_Colors:
     - _Color: {r: 0.4745098, g: 0.7411765, b: 0.90588236, a: 1}
+    - _DeepWaterColor: {r: 0.32547167, g: 0.80473, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 0.99528295, g: 0.9980013, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
