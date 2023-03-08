@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Queue : MonoBehaviour
 {
-    static public float distance_between_visitors = 7.0F;
+    static public float distance_between_visitors = 3.0F;
     private Attraction _attraction;
     private Queue<Visitor> _waiting_visitors = new Queue<Visitor>();
     private Visitor _last_in_queue = null;
