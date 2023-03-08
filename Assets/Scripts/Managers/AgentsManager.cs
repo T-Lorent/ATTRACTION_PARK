@@ -20,18 +20,12 @@ public class AgentsManager : MonoBehaviour
     [Header("VISITORS MANAGEMENT")]
     public int visitor_number = 50;
     public int visitor_increment = 25;
-
-    [Header("SPAWN MANAGEMENT")]
-    [SerializeField] private int grid_size = 10;
-    [SerializeField] private Terrain terrain;
-    [SerializeField] private GameObject lake;
+    
 
     /*====== PRIVATE ======*/
     private List<Walker> walkers = new List<Walker>();
     private List<Visitor> visitors = new List<Visitor>();
-    private List<Vector3> spawnable_cell = new List<Vector3>();
-    private float cellSizeX;
-    private float cellSizeZ;
+   
 
     
 
@@ -40,10 +34,6 @@ public class AgentsManager : MonoBehaviour
 
     private void Start()
     {
-
-       NavMesh.pathfindingIterationsPerFrame= 1000;
-        CreateSpawnGrid();
-
         // WALKERS
         for(int i=0; i < walker_number; ++i)
         {
@@ -134,16 +124,18 @@ public class AgentsManager : MonoBehaviour
         Vector3 random_position = Vector3.zero;
         int random;
 
+        Vector2 cell_size= new Vector2(GroundManager.Instance.cellSizeX, GroundManager.Instance.cellSizeZ);
+
         //We calcul an offset from the center of the cell
-        float position_offset_x = UnityEngine.Random.Range(-cellSizeX/2f, cellSizeX/2f);
-        float position_offset_z = UnityEngine.Random.Range(-cellSizeZ/2f, cellSizeZ/2f);
+        float position_offset_x = UnityEngine.Random.Range(-cell_size.x/2f, cell_size.x/2f);
+        float position_offset_z = UnityEngine.Random.Range(-cell_size.y/2f, cell_size.y/2f);
 
         do
         {
             //1. Pick a random index in spawnable cell range
-            random = UnityEngine.Random.Range(0, spawnable_cell.Count);
+            random = UnityEngine.Random.Range(0, GroundManager.Instance.spawnable_cell.Count);
 
-        } while (!NavMesh.SamplePosition(new Vector3(spawnable_cell[random].x+position_offset_x, -10.0f, spawnable_cell[random].z+position_offset_z), out hit, 50.0f, NavMesh.AllAreas));
+        } while (!NavMesh.SamplePosition(new Vector3(GroundManager.Instance.spawnable_cell[random].x+position_offset_x, -10.0f, GroundManager.Instance.spawnable_cell[random].z+position_offset_z), out hit, 50.0f, NavMesh.AllAreas));
 
         random_position = hit.position;
 
@@ -152,37 +144,5 @@ public class AgentsManager : MonoBehaviour
 
 
 
-    public void CreateSpawnGrid()
-    {
-        float lake_height = lake.transform.position.y + (lake.transform.localScale.y/2);
-
-        //We compute the size of each cell of the grid
-        float minCoordX = terrain.transform.position.x;
-        float minCoordZ = terrain.transform.position.z;
-
-        float maxCoordX = minCoordX + terrain.terrainData.size.x;
-        float maxCoordZ = minCoordZ + terrain.terrainData.size.z;
-
-        cellSizeX= (maxCoordX - minCoordX) / grid_size;
-        cellSizeZ= (maxCoordZ - minCoordZ) / grid_size;
-
-        Vector2 center = new Vector2(cellSizeX/2f, cellSizeZ/2f);
-
-        for(int i=0; i< grid_size; ++i)
-        {
-            for(int j=0; j< grid_size; ++j)
-            {
-                float positionX = i*cellSizeX + center.x + minCoordX;
-                float positionZ = j*cellSizeZ + center.y + minCoordZ;
-
-
-                float height = terrain.SampleHeight(new Vector3(positionX, 0, positionZ));
-                //We only take cells that are not in the lake
-                if(height > lake_height)
-                {
-                    spawnable_cell.Add(new Vector3(positionX, height, positionZ));
-                }
-            }
-        }
-    }
+    
 }
