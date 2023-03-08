@@ -100,6 +100,11 @@ public class Visitor : MonoBehaviour
         {
             Vector3 distance = transform.position - _before_in_queue.transform.position;
 
+            //The visitor rotate to look at the previous one on the queue
+            Quaternion rot = new Quaternion();
+            rot.SetLookRotation(-distance);
+            transform.rotation = rot;
+
             if (distance.magnitude > Queue.distance_between_visitors)
             {
                 SetDestination(_before_in_queue.transform.position + distance.normalized * Queue.distance_between_visitors);
