@@ -17,18 +17,22 @@ public class Walker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        // Check if we've reached the destination
         if (!_nav_mesh_agent.pathPending)
         {
             if (_nav_mesh_agent.remainingDistance <= _nav_mesh_agent.stoppingDistance)
             {
-                if (!_nav_mesh_agent.hasPath || _nav_mesh_agent.velocity.sqrMagnitude == 0f)
+                if (!_nav_mesh_agent.hasPath)
                 {
                     // Done
                     SetDestination();
                 }
             }
+
+            //If the walker is stuck , we give him a new destination
+            if(_nav_mesh_agent.velocity.sqrMagnitude < 5f)
+            {
+                SetDestination();
+            }       
         }
             
     }

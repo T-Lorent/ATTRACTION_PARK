@@ -144,6 +144,7 @@ public class AgentsManager : MonoBehaviour
         //We calcul an offset from the center of the case
         float position_offset_x = UnityEngine.Random.Range(-caseSizeX/2f, caseSizeX/2f);
         float position_offset_z = UnityEngine.Random.Range(-caseSizeZ/2f, caseSizeZ/2f);
+
         random_position = hit.position;
 
         return new Vector3(random_position.x + position_offset_x, random_position.y, random_position.z + position_offset_z);
@@ -155,7 +156,7 @@ public class AgentsManager : MonoBehaviour
     {
         float lake_height = lake.transform.position.y + (lake.transform.localScale.y/2);
 
-
+        //We compute the size of each case of the grid
         float minCoordX = terrain.transform.position.x;
         float minCoordZ = terrain.transform.position.z;
 
@@ -176,6 +177,7 @@ public class AgentsManager : MonoBehaviour
 
 
                 float height = terrain.SampleHeight(new Vector3(positionX, 0, positionZ));
+                //We only take cases that are not in the lake
                 if(height > lake_height)
                 {
                     spawnable_case.Add(new Vector3(positionX, height, positionZ));
