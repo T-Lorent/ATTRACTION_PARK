@@ -21,15 +21,25 @@ public class AgentsManager : MonoBehaviour
     public int visitor_number = 50;
     public int visitor_increment = 25;
 
+    [Header("SPAWN MANAGEMENT")]
+    [SerializeField] private int grid_size = 10;
+    [SerializeField] private Terrain terrain;
+    [SerializeField] private GameObject lake;
+
     /*====== PRIVATE ======*/
     private List<Walker> walkers = new List<Walker>();
     private List<Visitor> visitors = new List<Visitor>();
+    private List<Vector3> spawnable_case = new List<Vector3>();
+
+    
 
     /*====== UNITY METHODS ======*/
     private void Awake() => Instance = this;
 
     private void Start()
     {
+        CreateSpawnGrid();
+
         // WALKERS
         for(int i=0; i < walker_number; ++i)
         {
@@ -116,21 +126,53 @@ public class AgentsManager : MonoBehaviour
 
     public Vector3 GetRandomPosition()
     {
-        float coord_x;
-        float coord_z;
-
         NavMeshHit hit;
         Vector3 random_position = Vector3.zero;
+        int random;
 
         do
         {
-            //1. Pick a point
-            coord_x = UnityEngine.Random.Range(GroundManager.Instance.X_MIN, GroundManager.Instance.X_MAX);
-            coord_z = UnityEngine.Random.Range(GroundManager.Instance.Z_MIN, GroundManager.Instance.Z_MAX);
-        } while (!NavMesh.SamplePosition(new Vector3(coord_x, -10.0F, coord_z), out hit, 20.0f, NavMesh.AllAreas));
+            //1. Pick a random index in spawnable case range
+            random = UnityEngine.Random.Range(0, spawnable_case.Count);
 
+        } while (!NavMesh.SamplePosition(new Vector3(spawnable_case[random].x, -10.0f, spawnable_case[random].z), out hit, 50.0f, NavMesh.AllAreas));
         random_position = hit.position;
 
         return random_position;
+    }
+
+
+
+    public void CreateSpawnGrid()
+    {
+        float lake_height = lake.transform.position.y + (lake.transform.localScale.y/2);
+
+
+        float minCoordX = terrain.transform.position.x;
+        float minCoordZ = terrain.transform.position.z;
+
+        float maxCoordX = minCoordX + terrain.terrainData.size.x;
+        float maxCoordZ = minCoordZ + terrain.terrainData.size.z;
+
+        float caseSizeX= (maxCoordX - minCoordX) / grid_size;
+        float caseSizeZ= (maxCoordZ - minCoordZ) / grid_size;
+
+        Vector2 center = new Vector2(caseSizeX/2f, caseSizeZ/2f);
+
+        for(int i=0; i< grid_size; ++i)
+        {
+            for(int j=0; j< grid_size; ++j)
+            {
+                float positionX = i*caseSizeX + center.x + minCoordX;
+                float positionZ = j*caseSizeZ + center.y + minCoordZ;
+
+
+                float height = terrain.SampleHeight(new Vector3(positionX, 0, positionZ));
+                if(height > lake_height)
+                {
+                    spawnable_case.Add(new Vector3(positionX, height, positionZ));
+                }
+            }
+        }
     }
 }
