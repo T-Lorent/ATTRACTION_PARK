@@ -122,12 +122,11 @@ public class FreeFlyCamera : MonoBehaviour
         _enableTranslation = false;
         _enableSpeedAcceleration = false;
 
-        _body.GetComponent<NavMeshAgent>().enabled = true;
-
         NavMeshHit hit;
-        NavMesh.SamplePosition(new Vector3(_body.position.x, -10.0F, _body.position.z), out hit, 50.0f, NavMesh.AllAreas);
-
+        NavMesh.SamplePosition(new Vector3(_body.position.x, -10.0F, _body.position.z), out hit, 100.0f, NavMesh.AllAreas);
         _body.position = hit.position;
+
+        _body.GetComponent<NavMeshAgent>().enabled = true;
     }
 
     private void SetFreeflyMode()
